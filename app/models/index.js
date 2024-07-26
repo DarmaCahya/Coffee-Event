@@ -23,6 +23,11 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.user = require("../models/userModel.js")(sequelize, Sequelize);
+db.event = require("../models/eventModel.js")(sequelize, Sequelize);
+db.score = require("../models/scoreModel.js")(sequelize, Sequelize);
+
+db.event.hasMany(db.score, { foreignKey: 'eventId', onDelete: 'CASCADE' });
+db.score.belongsTo(db.event, { foreignKey: 'eventId', onDelete: 'CASCADE' });
 
 db.ROLES = ["jury", "admin"];
 

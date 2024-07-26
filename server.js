@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require('path');
+const bcrypt = require("bcryptjs");
 require('dotenv').config();
 
 const app = express();
@@ -21,6 +22,8 @@ app.use(
 
 require('./app/routes/authRoutes')(app);
 require('./app/routes/userRoutes')(app);
+require('./app/routes/eventRoutes')(app);
+require('./app/routes/scoreRoutes')(app);
 
 const db = require("./app/models");
 db.sequelize.sync({force: true}).then(() => {
@@ -47,7 +50,14 @@ async function initial() {
   await db.user.create({
     username: "john_doe",
     email: "john@gmail.com",
-    password: "securepassword",
+    password: bcrypt.hashSync("securepassword"),
     role: "admin"
+  });
+
+  await db.user.create({
+    username: "heho",
+    email: "john12@gmail.com",
+    password: bcrypt.hashSync("securepassword"),
+    role: "jury"
   });
 }
