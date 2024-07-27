@@ -3,26 +3,37 @@ const Event = db.event;
 const Op = db.Sequelize.Op;
 
 exports.createEvent = async (req, res) => {
-    try{
-        const {image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin} = req.body;
+    try {
+        const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
+        
         if (!image || !title || !description || !tag || !startDate || !endDate || !pin) {
-            return res.status(400).json({ message: "this field are required." }); 
+            return res.status(400).json({ message: "All fields are required." });
+        }
+
+        // Cek apakah ada event dengan judul yang sama
+        const existingEvent = await Event.findOne({ where: { title: title } });
+        if (existingEvent) {
+            return res.status(400).json({ message: "Event with this title already exists." });
         }
 
         const newEvent = await Event.create({
             image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
         });
         res.status(201).json(newEvent);
-    } catch (error){
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
 exports.getEvent = async (req, res) => {
-    try{
-        const event = await Event.findAll();
-        res.status(200).json(event);
-    } catch (error){
+    try {
+        const events = await Event.findAll();
+        if (req.route.path === '/event') {
+            res.locals.events = events;
+            return events;
+        }
+        res.status(200).json(events);
+    } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
@@ -34,6 +45,10 @@ exports.getEventById = async (req, res) => {
 
         if(!event){
             return res.status(404).json({ message: "Event not found." });
+        }
+        if (req.route.path === '/event/:id') {
+            res.locals.event = event;
+            return event;
         }
         res.status(200).json(event);
     } catch (error) {
@@ -91,16 +106,26 @@ exports.updateEvent = async (req, res) => {
 }
 
 exports.searchEvent = async (req, res) => {
-    const title = req.body.title;
+    const title = req.query.title || req.body.title; 
     try {
-        const event = await Event.findAll({where : {title: {[Op.like]: '%' + title + '%'}}});
-    
-        if (event.length === 0) {
-          return res.status(404).json({ message: "Event not found." });
+        const events = await Event.findAll({
+            where: {
+                title: {
+                    [Op.like]: '%' + title + '%'
+                }
+            }
+        });
+
+        if (req.route.path === '/event/search') {
+            return events;
+        }
+
+        if (events.length === 0) {
+            return res.status(404).json({ message: "Event not found." });
         } else {
-          res.status(200).json(event);
-        } 
-      }catch (error) {
-        res.status(500).send({message: 'Error retrieving Event with title=' + title});
+            res.status(200).json(events);
+        }
+    } catch (error) {
+        res.status(500).send({ message: 'Error retrieving Event with title=' + title });
     }
 }

@@ -101,7 +101,6 @@ exports.createScore = async (req, res) => {
             performance_total,
             total_score,
         });
-
         res.status(201).json(newScore);
     } catch (error) {
         res.status(500).json({ message: error.message });

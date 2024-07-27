@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Event List</title>
+</head>
+<body>
+    <h1>Event List</h1>
+
+    <!-- Form untuk mencari event -->
+    <form action="/event/search" method="POST">
+        <input type="text" name="title" placeholder="Search events by title">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul>
+        <% if (events && events.length > 0) { %>
+            <% events.forEach(event => { %>
+                <li><a href="/event/<%= event.id %>"><%= event.title %></a></li>
+            <% }) %>
+        <% } else { %>
+            <li>No events found</li>
+        <% } %>
+    </ul>
+</body>
+</html>

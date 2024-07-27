@@ -3,9 +3,13 @@ const cors = require("cors");
 const cookieSession = require("cookie-session");
 const path = require('path');
 const bcrypt = require("bcryptjs");
+const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 app.use(cors());
 app.set('view engine', 'ejs');
