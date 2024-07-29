@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+</head>
+<body>
+    <h1>Welcome to Home Page</h1>
+
+    <% if (userRole === "guest") { %>
+    <form action="/signin" method="GET">
+        <button type="submit">login</button>
+    </form>
+    <% } else { %>
+    <form action="/api/auth/signout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+    <% } %>
+
+</body>
+</html>

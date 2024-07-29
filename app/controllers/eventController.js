@@ -19,42 +19,34 @@ exports.createEvent = async (req, res) => {
         const newEvent = await Event.create({
             image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
         });
-        res.status(201).json(newEvent);
+        res.redirect('/admin/event');
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
 }
 
-exports.getEvent = async (req, res) => {
+exports.getEvent = async () => {
     try {
         const events = await Event.findAll();
-        if (req.route.path === '/event') {
-            res.locals.events = events;
-            return events;
-        }
-        res.status(200).json(events);
+        return events;
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        throw new Error(error.message); 
     }
-}
+};
 
 exports.getEventById = async (req, res) => {
-    try{
-        const id = req.params.id;
+    const id = req.params.id;
+    try {
         const event = await Event.findByPk(id);
-
-        if(!event){
+        if (!event) {
             return res.status(404).json({ message: "Event not found." });
         }
-        if (req.route.path === '/event/:id') {
-            res.locals.event = event;
-            return event;
-        }
-        res.status(200).json(event);
+        return event;
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        return res.status(500).json({ message: error.message });
     }
-}
+};
+
 
 exports.deleteEvent = async (req, res) => {
     const id = req.params.id;
@@ -76,7 +68,7 @@ exports.deleteEvent = async (req, res) => {
 
 exports.updateEvent = async (req, res) => {
     const id = req.params.id;
-    const {image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin} = req.body;
+    const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
 
     let updateFields = {};
     if (image) updateFields.image = image;
@@ -92,18 +84,19 @@ exports.updateEvent = async (req, res) => {
 
     try {
         const [num] = await Event.update(updateFields, {
-        where: { id: id }
+            where: { id: id }
         });
 
         if (num == 1) {
-        res.send({ message: "Event was updated successfully." });
+            res.redirect("/admin/event");
         } else {
-        res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
+            res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
         }
     } catch (err) {
         res.status(500).send({ message: `Error updating Event with id=${id}` });
     }
-}
+};
+
 
 exports.searchEvent = async (req, res) => {
     const title = req.query.title || req.body.title; 

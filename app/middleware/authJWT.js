@@ -7,22 +7,26 @@ verifyToken = (req, res, next) => {
     let token = req.session.token;
     
     console.log("Token from session:", token); 
-  
+    
+    req.user = {};
+
     if (!token) {
-        return res.status(403).send({
-            message: "No token provided!",
-        });
+        req.user.role = "guest";
+        next();
+        return;
     }
   
     jwt.verify(token, config.secret, (err, decoded) => {
         if (err) {
             console.log("Token verification error:", err); 
+            req.user.role = "guest";
             return res.status(401).send({
                 message: "Unauthorized!",
             });
         }
         console.log("Decoded token ID:", decoded.id); 
         req.user = decoded;
+        console.log(req.user)
         next();
     });
 };

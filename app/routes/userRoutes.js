@@ -12,10 +12,12 @@ module.exports = function(app) {
 
   app.get("/api/test/all", controller.allAccess);
 
-  app.get(
-    "/api/test/user",
-    [authJwt.verifyToken],
-    controller.userBoard
-  );  
-
+  app.get("/home", authJwt.verifyToken, (req, res) => {
+    try{
+      const userRole = req.user ? req.user.role : null;
+      res.render("home", {userRole});
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  });
 };

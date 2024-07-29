@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Update Event</title>
+</head>
+<body>
+    <h1>Update Event</h1>
+    <form action="/api/event/update/<%= event.id %>?_method=PUT" method="POST">
+        <input type="hidden" name="_method" value="PUT">
+        <label for="image">Image URL:</label>
+        <input type="text" id="image" name="image" value="<%= event.image %>"><br>
+
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" value="<%= event.title %>"><br>
+
+        <label for="description">Description:</label>
+        <textarea id="description" name="description"><%= event.description %></textarea><br>
+
+        <label for="tag">Tag:</label>
+        <input type="text" id="tag" name="tag" value="<%= event.tag %>"><br>
+
+        <label for="startDate">Start Date:</label>
+        <input type="date" id="startDate" name="startDate" value="<%= event.startDate ? event.startDate.toISOString().split('T')[0] : '' %>"><br>
+
+        <label for="endDate">End Date:</label>
+        <input type="date" id="endDate" name="endDate" value="<%= event.endDate ? event.endDate.toISOString().split('T')[0] : '' %>"><br>
+
+        <label for="winner1">Winner 1:</label>
+        <input type="text" id="winner1" name="winner1" value="<%= event.winner1 %>"><br>
+
+        <label for="winner2">Winner 2:</label>
+        <input type="text" id="winner2" name="winner2" value="<%= event.winner2 %>"><br>
+
+        <label for="winner3">Winner 3:</label>
+        <input type="text" id="winner3" name="winner3" value="<%= event.winner3 %>"><br>
+
+        <label for="pin">Pin:</label>
+        <input type="text" id="pin" name="pin" value="<%= event.pin %>"><br>
+
+        <button type="submit">Update Event</button>
+    </form>
+</body>
+</html>

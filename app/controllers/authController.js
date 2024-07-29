@@ -10,11 +10,12 @@ exports.signup = async (req, res) => {
         const user = await User.create({
         username: req.body.username,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8), 
+        role: "jury"
         });
 
         if (user) {
-        res.send({ message: "User registered successfully!" });
+        res.redirect("/admin/event");
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -23,23 +24,25 @@ exports.signup = async (req, res) => {
 
 exports.signin = async (req, res) => {
     try {
-        console.log("Attempting to find user by email:", req.body.email);
+        const email = req.body.email || req.query.email;
+        console.log("Attempting to find user by email:", email);
         const user = await User.findOne({
             where: {
-                email: req.body.email,
+                email: email,
             },
         });
 
         if (!user) {
-            console.log("No user found with email:", req.body.email);
+            console.log("No user found with email:", email);
             return res.status(404).send({ message: "User Not found." });
         }
 
         console.log("User found, checking password validity");
-        const passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        const pass = req.body.password || req.query.password;
+        const passwordIsValid = bcrypt.compareSync(pass, user.password);
 
         if (!passwordIsValid) {
-            console.log("Invalid password for user:", req.body.email);
+            console.log("Invalid password for user:", email);
             return res.status(401).send({
                 accessToken: null,
                 message: "Invalid Password!",
@@ -47,17 +50,14 @@ exports.signin = async (req, res) => {
         }
 
         console.log("Password is valid, signing token");
-        const token = jwt.sign({ id: user.id, email: user.email }, config.secret, {
+        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, config.secret, {
             expiresIn: 86400,
         });
 
         req.session.token = token;
         console.log("Token saved in session:", req.session.token);
-
-        return res.status(200).send({
-            message: "Sign-in successful",
-            accessToken: token
-        });
+        return res.redirect('/home');
+        
     } catch (error) {
         console.log("Error during sign-in:", error.message);
         res.status(500).send({ message: error.message });
@@ -76,9 +76,7 @@ exports.signout = async (req, res) => {
         const user = req.user;
         req.session = null; 
 
-        return res.status(200).send({
-            message: `You have been signed out, ${user.email}!`
-        });
+        return res.redirect("/home");
     } catch (err) {
         res.status(500).send({
             message: "An error occurred during sign out.",

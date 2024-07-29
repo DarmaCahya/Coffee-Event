@@ -14,7 +14,7 @@ module.exports = function(app) {
     app.post(
         "/api/auth/signup",
         [
-        verifySignUp.checkDuplicateUsernameOrEmail
+            authJwt.verifyToken, verifySignUp.checkDuplicateUsernameOrEmail, authJwt.isAdmin
         ],
         controller.signup
     );
@@ -22,4 +22,13 @@ module.exports = function(app) {
     app.post("/api/auth/signin", controller.signin);
 
     app.post("/api/auth/signout", authJwt.verifyToken, controller.signout);
+
+    app.get("/signup", [authJwt.verifyToken, authJwt.isAdmin]
+        , (req, res) => {
+        res.render("Authentication/signup");
+    });
+    
+    app.get("/signin", (req, res) => {
+        res.render("Authentication/login");
+    });
 };

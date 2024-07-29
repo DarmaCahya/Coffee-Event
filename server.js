@@ -4,10 +4,12 @@ const cookieSession = require("cookie-session");
 const path = require('path');
 const bcrypt = require("bcryptjs");
 const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+
 require('dotenv').config();
 
 const app = express();
-
+app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 

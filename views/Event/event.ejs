@@ -13,10 +13,26 @@
         <button type="submit">Search</button>
     </form>
 
+    <% if (userRole === "admin") { %>
+        <!-- Form untuk create event hanya untuk admin -->
+        <form action="/admin/event/create" method="GET">
+            <button type="submit">+</button>
+        </form>
+    <% } %>
+
+    <form action="/api/auth/signout" method="POST">
+        <button type="submit">Logout</button>
+    </form>
+
     <ul>
         <% if (events && events.length > 0) { %>
             <% events.forEach(event => { %>
-                <li><a href="/event/<%= event.id %>"><%= event.title %></a></li>
+                <li>
+                    <a href="/event/<%= event.id %>"><%= event.title %></a>
+                    <% if (userRole === "admin") { %>
+                        <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                    <% } %>
+                </li>
             <% }) %>
         <% } else { %>
             <li>No events found</li>
