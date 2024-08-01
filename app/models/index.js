@@ -29,6 +29,9 @@ db.score = require("../models/scoreModel.js")(sequelize, Sequelize);
 db.event.hasMany(db.score, { foreignKey: 'eventId', onDelete: 'CASCADE' });
 db.score.belongsTo(db.event, { foreignKey: 'eventId', onDelete: 'CASCADE' });
 
+db.user.hasMany(db.score, { foreignKey: 'userId', onDelete: 'CASCADE' });
+db.score.belongsTo(db.user, { foreignKey: 'userId', onDelete: 'CASCADE' });
+
 db.ROLES = ["jury", "admin"];
 
 module.exports = db;

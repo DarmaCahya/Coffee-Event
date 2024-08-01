@@ -1,5 +1,6 @@
 const db = require("../models");
 const Event = db.event;
+const Score = db.score;
 const Op = db.Sequelize.Op;
 
 exports.createEvent = async (req, res) => {
@@ -16,10 +17,14 @@ exports.createEvent = async (req, res) => {
             return res.status(400).json({ message: "Event with this title already exists." });
         }
 
+        if(pin.length !== 4){
+            return res.status(400).json({ message: "PIN must be exactly 5 digits long." });
+        }
+
         const newEvent = await Event.create({
             image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
         });
-        res.redirect('/admin/event');
+        res.redirect('/event');
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -36,14 +41,16 @@ exports.getEvent = async () => {
 
 exports.getEventById = async (req, res) => {
     const id = req.params.id;
+    const userId = req.userId;
     try {
         const event = await Event.findByPk(id);
         if (!event) {
-            return res.status(404).json({ message: "Event not found." });
+            throw new Error("Event not found.");
         }
+
         return event;
     } catch (error) {
-        return res.status(500).json({ message: error.message });
+        throw error;
     }
 };
 
@@ -53,21 +60,22 @@ exports.deleteEvent = async (req, res) => {
 
     try {
         const num = await Event.destroy({
-          where: { id: id }
+            where: { id: id }
         });
-    
+
         if (num == 1) {
-          res.send({ message: "Event was deleted successfully!" });
+            return res.redirect("/event");
         } else {
-          res.send({ message: `Cannot delete Event with id=${id}. Maybe Event was not found!` });
+            return res.json({ success: false, message: `Cannot delete Event with id=${id}. Maybe Event was not found!` });
         }
     } catch (err) {
-        res.status(500).send({ message: `Could not delete Event with id=${id}` });
+        return res.status(500).json({ success: false, message: `Could not delete Event with id=${id}` });
     }
-}
+};
 
 exports.updateEvent = async (req, res) => {
     const id = req.params.id;
+    const event = await Event.findByPk(id);
     const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
 
     let updateFields = {};
@@ -82,13 +90,24 @@ exports.updateEvent = async (req, res) => {
     if (winner3) updateFields.winner3 = winner3;
     if (pin) updateFields.pin = pin;
 
+    if (title && title !== event.title) {
+        const existingEvent = await Event.findOne({ where: { title: title } });
+        if (existingEvent) {
+            return res.status(400).json({ message: "Event with this title already exists." });
+        }
+    }
+
+    if(pin.length !== 4){
+        return res.status(400).json({ message: "PIN must be exactly 5 digits long." });
+    }
+
     try {
         const [num] = await Event.update(updateFields, {
             where: { id: id }
         });
 
         if (num == 1) {
-            res.redirect("/admin/event");
+            res.redirect(`/event/${id}`);
         } else {
             res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
         }

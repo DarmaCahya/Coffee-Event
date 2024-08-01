@@ -7,14 +7,25 @@
 <body>
     <h1>Welcome to Home Page</h1>
 
+    <form action="/event" method="GET">
+        <button type="submit">Event List</button>
+    </form>
+
     <% if (userRole === "guest") { %>
-    <form action="/signin" method="GET">
-        <button type="submit">login</button>
-    </form>
+        <form action="/signin" method="GET">
+            <button type="submit">Login</button>
+        </form>
+    <% } else if (userRole === "admin") { %>
+        <form action="/admin/dashboard" method="GET">
+            <button type="submit">Admin Page</button>
+        </form>
+        <form action="/api/auth/signout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
     <% } else { %>
-    <form action="/api/auth/signout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
+        <form action="/api/auth/signout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
     <% } %>
 
 </body>

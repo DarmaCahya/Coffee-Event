@@ -13,6 +13,14 @@ module.exports = (sequelize, Sequelize) => {
             },
             allowNull: false,
         },
+        userId: {
+            type: Sequelize.INTEGER,
+            references: {
+                model: 'users',
+                key: 'id'
+            },
+            allowNull: false,
+        },
         // Espresso
         espresso_flush_head1: {
             type: Sequelize.BOOLEAN,

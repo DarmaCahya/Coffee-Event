@@ -30,6 +30,7 @@ require('./app/routes/authRoutes')(app);
 require('./app/routes/userRoutes')(app);
 require('./app/routes/eventRoutes')(app);
 require('./app/routes/scoreRoutes')(app);
+require('./app/routes/adminRoutes')(app);
 
 const db = require("./app/models");
 db.sequelize.sync({force: true}).then(() => {
@@ -39,11 +40,11 @@ db.sequelize.sync({force: true}).then(() => {
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.render('Form/form');
+  res.status(404).send({message: "welcome coffee competition"});
 });
 
-app.get("/test", (req, res) => {
-  res.json({ message: "Welcome to bezkoder application." });
+app.use((req, res, next) => {
+  res.status(404).redirect('/notfound');
 });
 
 // Start the server
@@ -65,5 +66,15 @@ async function initial() {
     email: "john12@gmail.com",
     password: bcrypt.hashSync("securepassword"),
     role: "jury"
+  });
+
+  await db.event.create({
+    image: "image",
+    title: "Coffee Brewing Championship",
+    description: "A championship to find the best coffee brewer.",
+    tag: "Brewing",
+    startDate: new Date(),
+    endDate: new Date(),
+    pin: "1234"
   });
 }

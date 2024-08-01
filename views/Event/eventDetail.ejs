@@ -3,13 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <title>Event Detail</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+    <button onclick="goBack()">Go Back</button>
+
     <h1><%= event.title %></h1>
+    <p>ID Event: <%= event.id %></p>
     <p><%= event.tag %></p>
     <p><%= event.description %></p>
     <p>Start Date: <%= event.startDate %></p>
     <p>End Date: <%= event.endDate %></p>
-    <!-- Include other event details as necessary -->
+    <p>Pin Event: <%= event.pin %></p>
+
+    <% if (userRole === "admin" ) { %>
+        <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+        <form action="/api/event/delete/<%= event.id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete</button>
+        </form>
+    <% } %>
+    <% if(userRole === "jury" || userRole === "admin") { %>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pinModal">
+            Form Penilaian
+        </button>
+        <% } %>
+
+    <!-- Modal -->
+    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/event/score/<%= event.id %>/verify" method="POST">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="pin" class="form-label">PIN</label>
+                            <input type="password" class="form-control" id="pin" name="pin" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <% if (score) { %>
+        <div class="mt-4">
+            <h3>Scores</h3>
+            <% if(userRole === "jury" || userRole === "admin") { %>
+                <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                <form action="/api/score/delete/<%= event.id %>?_method=DELETE" method="POST">
+                    <button type="submit">Delete</button>
+                </form>
+            <% } %>
+            <p>Espresso 1 Total: <%= score.espresso_total1 %></p>
+            <p>Espresso 2 Total: <%= score.espresso_total2 %></p>
+            <p>Espresso Design Total: <%= score.espresso_total_dsgn %></p>
+            <p>Milk 1 Total: <%= score.milk_total1 %></p>
+            <p>Milk 2 Total: <%= score.milk_total2 %></p>
+            <p>Milk Design Total: <%= score.milk_total_dsgn %></p>
+            <p>Hygiene Total: <%= score.hygiene_total %></p>
+            <p>Performance Total: <%= score.performance_total %></p>
+            <p>Total Score: <%= score.total_score %></p>
+        </div>
+    <% } %>
+
+    <script>
+        function goBack() {
+            window.location.href = '/event';
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

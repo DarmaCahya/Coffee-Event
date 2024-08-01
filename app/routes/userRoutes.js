@@ -20,4 +20,13 @@ module.exports = function(app) {
       res.status(500).send({ message: error.message });
     }
   });
+
+  app.get("/unauthorized", (req, res) => {
+    res.render("Unauthorized");
+  });
+
+  app.get("/notfound", (req, res) => {
+    res.render("notFound");
+  });
+
 };

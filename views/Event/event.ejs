@@ -2,35 +2,44 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    
     <title>Event List</title>
 </head>
 <body>
     <h1>Event List</h1>
 
-    <!-- Form untuk mencari event -->
     <form action="/event/search" method="POST">
         <input type="text" name="title" placeholder="Search events by title">
         <button type="submit">Search</button>
     </form>
+    <button onclick="goBack()"> <- </button>
 
-    <% if (userRole === "admin") { %>
-        <!-- Form untuk create event hanya untuk admin -->
+    <% if (userRole === "admin" && currentPath === "/admin/dashboard") { %>
         <form action="/admin/event/create" method="GET">
             <button type="submit">+</button>
         </form>
     <% } %>
 
-    <form action="/api/auth/signout" method="POST">
-        <button type="submit">Logout</button>
-    </form>
+    <% if (userRole === "guest") { %>
+        <form action="/signin" method="GET">
+            <button type="submit">login</button>
+        </form>
+    <% } else { %>
+        <form action="/api/auth/signout" method="POST">
+            <button type="submit">Logout</button>
+        </form>
+    <% } %>
 
     <ul>
         <% if (events && events.length > 0) { %>
             <% events.forEach(event => { %>
                 <li>
                     <a href="/event/<%= event.id %>"><%= event.title %></a>
-                    <% if (userRole === "admin") { %>
+                    <% if (userRole === "admin" && currentPath === "/admin/dashboard") { %>
                         <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                        <form action="/api/event/delete/<%= event.id %>?_method=DELETE" method="POST">
+                            <button type="submit">Delete</button>
+                        </form>
                     <% } %>
                 </li>
             <% }) %>
@@ -38,5 +47,11 @@
             <li>No events found</li>
         <% } %>
     </ul>
+
+    <script>
+        function goBack() {
+            window.location.href = '/home';
+        }
+    </script>
 </body>
 </html>

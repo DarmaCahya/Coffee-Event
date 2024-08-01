@@ -20,11 +20,10 @@ verifyToken = (req, res, next) => {
         if (err) {
             console.log("Token verification error:", err); 
             req.user.role = "guest";
-            return res.status(401).send({
-                message: "Unauthorized!",
-            });
+            return res.status(401).redirect('/unauthorized')
         }
         console.log("Decoded token ID:", decoded.id); 
+        req.userId = decoded.id;
         req.user = decoded;
         console.log(req.user)
         next();
@@ -36,7 +35,7 @@ isAdmin = (req, res, next) => {
     User.findByPk(id)
     .then(user => {
         if (!user) {
-            return res.status(404).send({ message: "User not found." });
+          return res.status(401).redirect('/unauthorized')
         }
 
         if (user.role === "admin") {
@@ -44,9 +43,7 @@ isAdmin = (req, res, next) => {
             next();
             return;
         }
-        res.status(403).send({
-            message: "Require Admin Role!"
-        });
+        return res.status(401).redirect('/unauthorized')
     })
     .catch(err => {
         res.status(500).send({
