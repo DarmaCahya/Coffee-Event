@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Espresso and Milk Sections</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .total-score {
+            background-color: yellow;
+            text-align: center;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+    <button onclick="goBack()"> <- </button>
+
+    <div class="container border">
+        <form id="scoreForm" action="/admin/event/<%= id %>/score/<%= score.id %>/update" method="POST">
+            <div class="row mb-3">
+                <div class="col">
+                    <label for="inputRepresenting" class="form-label">Representing</label>
+                    <input type="text" class="form-control" id="inputRepresenting" name="representing" value="<%= score.representing %>" required>
+                </div>
+                <div class="col">
+                    <label for="inputCompetitor" class="form-label">Competitor</label>
+                    <input type="text" class="form-control" id="inputCompetitor" name="competitor" value="<%= score.competitor %>" required>
+                </div>
+                <div class="col">
+                    <label for="inputJudge" class="form-label">Judge</label>
+                    <input type="text" class="form-control" id="inputJudge" name="judge" value="<%= score.judge %>" required>
+                </div>
+            </div>
+            <input type="hidden" name="eventId" value="<%= id %>">
+
+            <div class="container mt-3">
+                <div class="dropdown">
+                    <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                        Select Section
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" href="#" onclick="showSection('espresso-section', 'Espresso')">Espresso</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showSection('milk-section', 'Milk')">Milk</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showSection('hygiene-section', 'Hygiene')">Hygiene</a></li>
+                        <li><a class="dropdown-item" href="#" onclick="showSection('performance-section', 'Performance')">Performance</a></li>
+                    </ul>
+                </div>
+
+                <!-- Espresso Section -->
+                <section id="espresso-section" class="section">
+                    <h2>Espresso</h2>
+
+                    <!-- Free Pour 1 Section -->
+                    <h3>Free Pour 1</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Flushes the group head.</td>
+                                <td><input type="radio" name="espresso_flush_head1" value="yes" <%= score.espresso_flush_head1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_flush_head1" value="no" <%= !score.espresso_flush_head1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Dry/clean filter basket before dosing.</td>
+                                <td><input type="radio" name="espresso_dry_filter1" value="yes" <%= score.espresso_dry_filter1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dry_filter1" value="no" <%= !score.espresso_dry_filter1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Acceptable spill/waste when dosing/grinding.</td>
+                                <td><input type="radio" name="espresso_spill1" value="yes" <%= score.espresso_spill1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_spill1" value="no" <%= !score.espresso_spill1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Consistent dosing and tamping.</td>
+                                <td><input type="radio" name="espresso_dosing1" value="yes" <%= score.espresso_dosing1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dosing1" value="no" <%= !score.espresso_dosing1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans portafilters (before insert).</td>
+                                <td><input type="radio" name="espresso_clean_port1" value="yes" <%= score.espresso_clean_port1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_clean_port1" value="no" <%= !score.espresso_clean_port1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Insert and immediate brew.</td>
+                                <td><input type="radio" name="espresso_brew1" value="yes" <%= score.espresso_brew1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_brew1" value="no" <%= !score.espresso_brew1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Extraction time (within 3 seconds variance across all drinks served) × 4.</td>
+                                <td><input type="radio" name="espresso_extract_time1" value="yes" <%= score.espresso_extract_time1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_extract_time1" value="no" <%= !score.espresso_extract_time1 ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-10)</div>
+
+                    <!-- Free Pour 2 Section -->
+                    <h3>Free Pour 2</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Flushes the group head.</td>
+                                <td><input type="radio" name="espresso_flush_head2" value="yes" <%= score.espresso_flush_head2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_flush_head2" value="no" <%= !score.espresso_flush_head2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Dry/clean filter basket before dosing.</td>
+                                <td><input type="radio" name="espresso_dry_filter2" value="yes" <%= score.espresso_dry_filter2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dry_filter2" value="no" <%= !score.espresso_dry_filter2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Acceptable spill/waste when dosing/grinding.</td>
+                                <td><input type="radio" name="espresso_spill2" value="yes" <%= score.espresso_spill2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_spill2" value="no" <%= !score.espresso_spill2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Consistent dosing and tamping.</td>
+                                <td><input type="radio" name="espresso_dosing2" value="yes" <%= score.espresso_dosing2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dosing2" value="no" <%= !score.espresso_dosing2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans portafilters (before insert).</td>
+                                <td><input type="radio" name="espresso_clean_port2" value="yes" <%= score.espresso_clean_port2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_clean_port2" value="no" <%= !score.espresso_clean_port2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Insert and immediate brew.</td>
+                                <td><input type="radio" name="espresso_brew2" value="yes" <%= score.espresso_brew2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_brew2" value="no" <%= !score.espresso_brew2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Extraction time (within 3 seconds variance across all drinks served) × 4.</td>
+                                <td><input type="radio" name="espresso_extract_time2" value="yes" <%= score.espresso_extract_time2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_extract_time2" value="no" <%= !score.espresso_extract_time2 ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-10)</div>
+
+                    <!-- Design Latte Section -->
+                    <h3>Design Latte</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Flushes the group head.</td>
+                                <td><input type="radio" name="espresso_flush_head_dsgn" value="yes" <%= score.espresso_flush_head_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_flush_head_dsgn" value="no" <%= !score.espresso_flush_head_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Dry/clean filter basket before dosing.</td>
+                                <td><input type="radio" name="espresso_dry_filter_dsgn" value="yes" <%= score.espresso_dry_filter_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dry_filter_dsgn" value="no" <%= !score.espresso_dry_filter_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Acceptable spill/waste when dosing/grinding.</td>
+                                <td><input type="radio" name="espresso_spill_dsgn" value="yes" <%= score.espresso_spill_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_spill_dsgn" value="no" <%= !score.espresso_spill_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Consistent dosing and tamping.</td>
+                                <td><input type="radio" name="espresso_dosing_dsgn" value="yes" <%= score.espresso_dosing_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_dosing_dsgn" value="no" <%= !score.espresso_dosing_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans portafilters (before insert).</td>
+                                <td><input type="radio" name="espresso_clean_port_dsgn" value="yes" <%= score.espresso_clean_port_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_clean_port_dsgn" value="no" <%= !score.espresso_clean_port_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Insert and immediate brew.</td>
+                                <td><input type="radio" name="espresso_brew_dsgn" value="yes" <%= score.espresso_brew_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_brew_dsgn" value="no" <%= !score.espresso_brew_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Extraction time (within 3 seconds variance across all drinks served) × 4.</td>
+                                <td><input type="radio" name="espresso_extract_time_dsgn" value="yes" <%= score.espresso_extract_time_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="espresso_extract_time_dsgn" value="no" <%= !score.espresso_extract_time_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-10)</div>
+                </section>
+
+                <!-- Milk Section -->
+                <section id="milk-section" class="section">
+                    <h2>Milk</h2>
+                    <!-- Free Pour 1 Section -->
+                    <h3>Free Pour 1</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Empty/clean pitcher at start.</td>
+                                <td><input type="radio" name="milk_clean_pitcher1" value="yes" <%= score.milk_clean_pitcher1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_pitcher1" value="no" <%= !score.milk_clean_pitcher1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand before steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_before1" value="yes" <%= score.milk_purge_wand_before1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_before1" value="no" <%= !score.milk_purge_wand_before1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_clean_wand1" value="yes" <%= score.milk_clean_wand1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_wand1" value="no" <%= !score.milk_clean_wand1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_after1" value="yes" <%= score.milk_purge_wand_after1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_after1" value="no" <%= !score.milk_purge_wand_after1 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Clean pitcher/acceptable milk waste at the end.</td>
+                                <td><input type="radio" name="milk_pitcher_waste_end1" value="yes" <%= score.milk_pitcher_waste_end1 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_pitcher_waste_end1" value="no" <%= !score.milk_pitcher_waste_end1 ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-5)</div>
+
+                    <!-- Free Pour 2 Section -->
+                    <h3>Free Pour 2</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Empty/clean pitcher at start.</td>
+                                <td><input type="radio" name="milk_clean_pitcher2" value="yes" <%= score.milk_clean_pitcher2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_pitcher2" value="no" <%= !score.milk_clean_pitcher2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand before steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_before2" value="yes" <%= score.milk_purge_wand_before2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_before2" value="no" <%= !score.milk_purge_wand_before2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_clean_wand2" value="yes" <%= score.milk_clean_wand2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_wand2" value="no" <%= !score.milk_clean_wand2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_after2" value="yes" <%= score.milk_purge_wand_after2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_after2" value="no" <%= !score.milk_purge_wand_after2 ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Clean pitcher/acceptable milk waste at the end.</td>
+                                <td><input type="radio" name="milk_pitcher_waste_end2" value="yes" <%= score.milk_pitcher_waste_end2 ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_pitcher_waste_end2" value="no" <%= !score.milk_pitcher_waste_end2 ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-5)</div>
+
+                    <!-- Design Latte Section -->
+                    <h3>Design Latte</h3>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>Yes</th>
+                                <th>No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Empty/clean pitcher at start.</td>
+                                <td><input type="radio" name="milk_clean_pitcher_dsgn" value="yes" <%= score.milk_clean_pitcher_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_pitcher_dsgn" value="no" <%= !score.milk_clean_pitcher_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand before steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_before_dsgn" value="yes" <%= score.milk_purge_wand_before_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_before_dsgn" value="no" <%= !score.milk_purge_wand_before_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Cleans steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_clean_wand_dsgn" value="yes" <%= score.milk_clean_wand_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_clean_wand_dsgn" value="no" <%= !score.milk_clean_wand_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Purges steam wand after steaming.</td>
+                                <td><input type="radio" name="milk_purge_wand_after_dsgn" value="yes" <%= score.milk_purge_wand_after_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_purge_wand_after_dsgn" value="no" <%= !score.milk_purge_wand_after_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                            <tr>
+                                <td>Clean pitcher/acceptable milk waste at the end.</td>
+                                <td><input type="radio" name="milk_pitcher_waste_end_dsgn" value="yes" <%= score.milk_pitcher_waste_end_dsgn ? 'checked' : '' %> required></td>
+                                <td><input type="radio" name="milk_pitcher_waste_end_dsgn" value="no" <%= !score.milk_pitcher_waste_end_dsgn ? 'checked' : '' %> required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-5)</div>
+                </section>
+
+                <!-- Hygiene Section -->
+                <section id="hygiene-section" class="section">
+                    <h2>Hygiene</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>(0-6pts) × 2</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Hygiene (Cleans the steam wand, clean pitcher, milk cloth use)</td>
+                                <td><input type="number" min="0" max="6" name="hygiene_clean_wand" value="<%= score.hygiene_clean_wand %>" required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-12)</div>
+                </section>
+
+                <!-- Performance Section -->
+                <section id="performance-section" class="section">
+                    <h2>Performance</h2>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Pertanyaan</th>
+                                <th>(0-6pts)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Workspace organised and clean at start and in the end</td>
+                                <td><input type="number" min="0" max="6" name="performance_org_workspace" value="<%= score.performance_org_workspace %>" required></td>
+                            </tr>
+                            <tr>
+                                <td>Overall impression (use of grinder, well extracted espresso, milk techniques, machine cleanliness)</td>
+                                <td><input type="number" min="0" max="6" name="performance_overall" value="<%= score.performance_overall %>" required></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <div class="total-score">TOTAL (0-42)</div>
+                </section>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function showSection(sectionId, sectionName) {
+            var sections = document.getElementsByClassName('section');
+            for (var i = 0; i < sections.length; i++) {
+                sections[i].style.display = 'none';
+            }
+            document.getElementById(sectionId).style.display = 'block';
+            document.getElementById('dropdownMenuButton').innerText = sectionName;
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showSection('espresso-section', 'Espresso');
+        });
+
+        function goBack() {
+            window.location.href = '/event/<%= id %>';
+        }
+    </script>
+</body>
+</html>

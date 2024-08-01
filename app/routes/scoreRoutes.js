@@ -17,7 +17,7 @@ module.exports = function(app) {
     app.post("/api/score/:id/create", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.createScore);
     app.get("/api/scores", [authJwt.verifyToken, authJwt.isAdmin], controller.getScores);
     app.get("/api/event/:eventId/score/:scoreId", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.getScoreById);
-    app.put("/api/score/:id", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.updateScore);
+    app.post("/admin/event/:id/score/:idScore/update", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.updateScore);
     app.delete("/api/score/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteScore);
     app.post("/api/scores/search", [authJwt.verifyToken, authJwt.isAdmin], controller.searchScores);
 
@@ -59,4 +59,20 @@ module.exports = function(app) {
             res.status(500).send({ message: error.message });
         }
     });
+
+    app.get("/admin/event/:id/score/:idScore", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
+        try {
+            const id = req.params.id;
+            const idScore = req.params.idScore;
+            const event = await Event.findByPk(id);
+            if (!event) {
+                return res.status(404).send({ message: 'Event not found' });
+            }
+
+            const score = await controller.getScoreById(req, res);
+            res.render("Scores/updateForm", { event, score, id });
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    });    
 };

@@ -26,7 +26,7 @@
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pinModal">
             Form Penilaian
         </button>
-        <% } %>
+    <% } %>
 
     <!-- Modal -->
     <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
@@ -56,8 +56,8 @@
         <div class="mt-4">
             <h3>Scores</h3>
             <% if(userRole === "jury" || userRole === "admin") { %>
-                <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
-                <form action="/api/score/delete/<%= event.id %>?_method=DELETE" method="POST">
+                <button onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
+                <form action="/api/score/<%= score.id %>?_method=DELETE" method="POST">
                     <button type="submit">Delete</button>
                 </form>
             <% } %>

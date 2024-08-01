@@ -21,6 +21,18 @@ module.exports = (sequelize, Sequelize) => {
             },
             allowNull: false,
         },
+        representing: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        competitor: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
+        judge: {
+            type: Sequelize.STRING,
+            allowNull: false
+        },
         // Espresso
         espresso_flush_head1: {
             type: Sequelize.BOOLEAN,
