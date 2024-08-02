@@ -56,11 +56,11 @@ module.exports = function(app) {
         }
     });
     
-    app.post("/event/search", async (req, res) => {
+    app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {
             const userRole = req.user ? req.user.role : null;
             const events = await controller.searchEvent(req, res);
-            res.render('Event/event', { events, userRole });
+            res.render('Event/event', { events, userRole, currentPath: req.path});
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
@@ -76,22 +76,4 @@ module.exports = function(app) {
     //         res.status(500).send({ message: error.message });
     //     }
     // });
-
-    app.get("/admin/event/create", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
-        try {
-            res.render('Admin/createEvent');
-        } catch (error) {
-            res.status(500).send({ message: error.message });
-        }
-    });
-
-    app.get("/admin/event/:id", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
-        try {
-            const id = req.params
-            const event = await controller.getEventById(req, res);
-            res.render("Admin/updateEvent", { event, id});
-        } catch (error) {
-            res.status(500).send({ message: error.message });
-        }
-    });
 };

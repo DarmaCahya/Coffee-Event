@@ -11,20 +11,24 @@ exports.createEvent = async (req, res) => {
             return res.status(400).json({ message: "All fields are required." });
         }
 
-        // Cek apakah ada event dengan judul yang sama
+        const validTags = ['completed', 'on-going', 'upcoming'];
+        if (!validTags.includes(tag)) {
+            return res.status(400).json({ message: "Invalid tag value." });
+        }
+
         const existingEvent = await Event.findOne({ where: { title: title } });
         if (existingEvent) {
             return res.status(400).json({ message: "Event with this title already exists." });
         }
 
         if(pin.length !== 4){
-            return res.status(400).json({ message: "PIN must be exactly 5 digits long." });
+            return res.status(400).json({ message: "PIN must be exactly 4 digits long." });
         }
 
         const newEvent = await Event.create({
             image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
         });
-        res.redirect('/event');
+        res.redirect('/admin/dashboard');
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
@@ -64,7 +68,7 @@ exports.deleteEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            return res.redirect("/event");
+            return res.redirect("/admin/dashboard");
         } else {
             return res.json({ success: false, message: `Cannot delete Event with id=${id}. Maybe Event was not found!` });
         }
@@ -90,6 +94,11 @@ exports.updateEvent = async (req, res) => {
     if (winner3) updateFields.winner3 = winner3;
     if (pin) updateFields.pin = pin;
 
+    const validTags = ['completed', 'on-going', 'upcoming'];
+    if (tag && !validTags.includes(tag)) {
+        return res.status(400).json({ message: "Invalid tag value." });
+    }
+
     if (title && title !== event.title) {
         const existingEvent = await Event.findOne({ where: { title: title } });
         if (existingEvent) {
@@ -97,8 +106,8 @@ exports.updateEvent = async (req, res) => {
         }
     }
 
-    if(pin.length !== 4){
-        return res.status(400).json({ message: "PIN must be exactly 5 digits long." });
+    if(pin && pin.length !== 4){
+        return res.status(400).json({ message: "PIN must be exactly 4 digits long." });
     }
 
     try {
@@ -107,7 +116,7 @@ exports.updateEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            res.redirect(`/event/${id}`);
+            res.redirect(`/admin/dashboard`);
         } else {
             res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
         }

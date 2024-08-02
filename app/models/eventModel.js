@@ -18,7 +18,8 @@ module.exports = (sequelize, Sequelize) => {
         allowNull: false
       },
       tag: {
-        type: Sequelize.STRING,
+        type: Sequelize.ENUM,
+        values: ['completed', 'on-going', 'upcoming'],
         allowNull: false
       },
       startDate: {

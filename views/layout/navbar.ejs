@@ -1,21 +1,28 @@
-<nav class="navbar bg-body-tertiary">
-    <div class="container">
-      <a class="navbar-brand" href="#">
-        <img src="/docs/5.3/assets/brand/bootstrap-logo.svg" alt="Bootstrap" width="30" height="24">
-      </a>
+<nav class="navbar bg-body-tertiary p-4 me-5">
+  <div class="container-fluid justify-content-end">
+    <% if (userRole === "admin" && currentPath !== "/admin/dashboard") { %>
+      <div>
+        <form action="/admin/dashboard" method="GET" class="d-inline">
+          <button type="submit" class="btn mx-4 fs-4 btn-primary">Admin Page</button>
+        </form>
+      </div>
+    <% } %>
+
+    <a class="btn btn-outline-success mx-4 fs-4" href="/home" role="button">Beranda</a>
+    <a class="btn mx-4 fs-4" href="/home#wheel" role="button">Coffee Wheel</a>
+    <a class="btn mx-4 fs-4" href="/event" role="button">Event</a>
+    <a class="btn fs-4" href="/home#wheel" role="button">About</a>
+
+    <div>
+      <% if (userRole === "guest") { %>
+        <form action="/signin" method="GET" class="d-inline">
+          <button type="submit" class="btn mx-4 fs-4">Login</button>
+        </form>
+      <% } else { %>
+        <form action="/api/auth/signout" method="POST" class="d-inline">
+          <button type="submit" class="btn mx-4 fs-4">Logout</button>
+        </form>
+      <% } %>
     </div>
-    <ul class="nav justify-content-end">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Active</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Link</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link disabled" aria-disabled="true">Disabled</a>
-        </li>
-    </ul>
+  </div>
 </nav>

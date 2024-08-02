@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 app.use(cors());
 app.set('view engine', 'ejs');
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(
   cookieSession({
@@ -116,7 +116,47 @@ async function initial() {
     image: "image",
     title: "Coffee Brewing Championship",
     description: "A championship to find the best coffee brewer.",
-    tag: "Brewing",
+    tag: "completed",
+    startDate: new Date(),
+    endDate: new Date(),
+    pin: "1234"
+  });
+
+  await db.event.create({
+    image: "image",
+    title: "Coffee Brewing Championship2",
+    description: "A championship to find the best coffee brewer.",
+    tag: "on-going",
+    startDate: new Date(),
+    endDate: new Date(),
+    pin: "1234"
+  });
+
+  await db.event.create({
+    image: "image",
+    title: "Coffee Brewing Championship3",
+    description: "A championship to find the best coffee brewer.",
+    tag: "upcoming",
+    startDate: new Date(),
+    endDate: new Date(),
+    pin: "1234"
+  });
+
+  await db.event.create({
+    image: "image",
+    title: "Coffee Brewing Championship4",
+    description: "A championship to find the best coffee brewer.",
+    tag: "completed",
+    startDate: new Date(),
+    endDate: new Date(),
+    pin: "1234"
+  });
+
+  await db.event.create({
+    image: "image",
+    title: "Coffee Brewing Championship5",
+    description: "A championship to find the best coffee brewer.",
+    tag: "on-going",
     startDate: new Date(),
     endDate: new Date(),
     pin: "1234"

@@ -31,4 +31,22 @@ module.exports = function(app) {
     }
   })
 
+    app.get("/admin/event/create", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
+        try {
+            res.render('Admin/createEvent');
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    });
+
+    app.get("/admin/event/:id", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
+        try {
+            const id = req.params
+            const event = await eventController.getEventById(req, res);
+            res.render("Admin/updateEvent", { event, id});
+        } catch (error) {
+            res.status(500).send({ message: error.message });
+        }
+    });
+
 };
