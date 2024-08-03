@@ -38,7 +38,7 @@ module.exports = function(app) {
     app.get("/event/:id", authJwt.verifyToken, async (req, res) => {
         try {
             const userRole = req.user ? req.user.role : null;
-            const userId = req.userId;
+            const user = req.user;
             const id = req.params.id;
             
             const event = await controller.getEventById(req, res);
@@ -46,11 +46,12 @@ module.exports = function(app) {
             const score = await Score.findOne({
                 where: {
                     eventId: id,
-                    userId: userId
+                    userId: user.id
                 }
             });
+            console.log(user);  
     
-            res.render('Event/eventDetail', { event, id, userRole, score });
+            res.render('Event/eventDetail', { user, event, id, userRole, score, currentPath: req.path });
         } catch (error) {
             res.status(500).send({ message: error.message });
         }

@@ -297,6 +297,7 @@ exports.deleteScore = async (req, res) => {
 
 exports.updateScore = async (req, res) => {
     const idScore = req.params.idScore; 
+    const id = req.params.id;
     const scoreData = req.body;
 
     const {
@@ -508,7 +509,7 @@ exports.updateScore = async (req, res) => {
         });
 
         if (num == 1) {
-            res.send({ message: "Score was updated successfully." });
+            res.redirect(`/event/${id}`);
         } else {
             res.send({ message: `Cannot update Score with id=${idScore}. Maybe Score was not found or req.body is empty!` });
         }

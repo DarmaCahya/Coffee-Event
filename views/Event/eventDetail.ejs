@@ -1,84 +1,218 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Event Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .timeline {
+            margin-top: 20px;
+        }
+
+        .winners {
+            margin-top: 30px;
+        }
+
+        .winners img {
+            width: 100px;
+            height: auto;
+        }
+
+        .modal-body input {
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
+
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <%- include('../layout/navbar') %>
 
-    <h1><%= event.title %></h1>
-    <p>ID Event: <%= event.id %></p>
-    <p><%= event.tag %></p>
-    <p><%= event.description %></p>
-    <p>Start Date: <%= event.startDate %></p>
-    <p>End Date: <%= event.endDate %></p>
-    <p>Pin Event: <%= event.pin %></p>
+    <div class="container mt-5">
+        <% if (userRole === "admin") { %>
+            <div class="d-flex mb-3">
+                <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+            </div>
+        <% } %>
 
-    <% if (userRole === "admin" ) { %>
-        <button onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
-        <form action="/api/event/delete/<%= event.id %>?_method=DELETE" method="POST">
-            <button type="submit">Delete</button>
-        </form>
-    <% } %>
-    <% if(userRole === "jury" || userRole === "admin") { %>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#pinModal">
+        <div class="card">
+            <img src="<%= event.image %>" class="card-img-top" alt="image">
+            <div class="card-body">
+                <h1 class="card-title"><%= event.title %></h1>
+                <p class="card-text"><%= event.tag %></p>
+                <p class="card-text"><%= event.description %></p>
+                <p class="card-text">Waktu Pelaksanaan: <%= event.startDate.toDateString() %> sampai <%= event.endDate.toDateString() %></p>
+            </div>
+        </div>
+
+        <% if (userRole === "jury" || userRole === "admin") { %>
+        <button type="button" class="btn btn-primary btn-lg my-5" data-bs-toggle="modal" data-bs-target="#pinModal">
             Form Penilaian
         </button>
-    <% } %>
+        <% } %>
 
-    <!-- Modal -->
-    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="winners">
+            <h3 class="text-center fw-bold fs-3">Pemenang Kompetisi</h3>
+            <div class="my-5 d-flex justify-content-around">
+                <div>
+                    <img src="/path/to/trophy.png" alt="Trophy Image">
+                    <p>Juara I<br>Lorem ipsum</p>
                 </div>
-                <form action="/event/score/<%= event.id %>/verify" method="POST">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="pin" class="form-label">PIN</label>
-                            <input type="password" class="form-control" id="pin" name="pin" required>
+                <div>
+                    <img src="/path/to/trophy.png" alt="Trophy Image">
+                    <p>Juara II<br>Lorem ipsum</p>
+                </div>
+                <div>
+                    <img src="/path/to/trophy.png" alt="Trophy Image">
+                    <p>Juara III<br>Lorem ipsum</p>
+                </div>
+            </div>
+        </div>
+
+        <% if (userRole === "guest") { %>
+        <div class="mt-4">
+            <h3>Login Juri</h3>
+            <p>Untuk juri silahkan login disini, <a href="/signin">Login</a></p>
+        </div>
+        <% } %>
+
+        <% if (score) { %>
+            <div class="mt-4">
+                <h3 class="fw-bold fs-3">Scores</h3>
+                <p class="fs-5">by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
+                <% if (userRole === "jury" || userRole === "admin") { %>
+                <div class="d-flex justify-content-end mb-3">
+                    <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
+                    <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+                <% } %>
+                <table class="table table-sm table-striped-columns mb-5">
+                    <thead class="fs-5">
+                        <tr>
+                            <th scope="col">Category</th>
+                            <th scope="col">Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Espresso 1 Total</td>
+                            <td><%= score.espresso_total1 %></td>
+                        </tr>
+                        <tr>
+                            <td>Espresso 2 Total</td>
+                            <td><%= score.espresso_total2 %></td>
+                        </tr>
+                        <tr>
+                            <td>Espresso Design Total</td>
+                            <td><%= score.espresso_total_dsgn %></td>
+                        </tr>
+                        <tr>
+                            <td>Milk 1 Total</td>
+                            <td><%= score.milk_total1 %></td>
+                        </tr>
+                        <tr>
+                            <td>Milk 2 Total</td>
+                            <td><%= score.milk_total2 %></td>
+                        </tr>
+                        <tr>
+                            <td>Milk Design Total</td>
+                            <td><%= score.milk_total_dsgn %></td>
+                        </tr>
+                        <tr>
+                            <td>Hygiene Total</td>
+                            <td><%= score.hygiene_total %></td>
+                        </tr>
+                        <tr>
+                            <td>Performance Total</td>
+                            <td><%= score.performance_total %></td>
+                        </tr>
+                        <tr class="table-warning">
+                            <td>Total Score</td>
+                            <td><%= score.total_score %></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+            
+
+        <!-- Delete Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Are you sure you want to delete this event?
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <form id="deleteForm" action="" method="POST" style="display:inline;">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+        </div>
+
+        <!-- PIN Modal -->
+        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/event/score/<%= event.id %>/verify" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="pin" class="form-label">PIN</label>
+                                <input type="password" class="form-control" id="pin" name="pin" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 
-    <% if (score) { %>
-        <div class="mt-4">
-            <h3>Scores</h3>
-            <% if(userRole === "jury" || userRole === "admin") { %>
-                <button onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
-                <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST">
-                    <button type="submit">Delete</button>
-                </form>
-            <% } %>
-            <p>Espresso 1 Total: <%= score.espresso_total1 %></p>
-            <p>Espresso 2 Total: <%= score.espresso_total2 %></p>
-            <p>Espresso Design Total: <%= score.espresso_total_dsgn %></p>
-            <p>Milk 1 Total: <%= score.milk_total1 %></p>
-            <p>Milk 2 Total: <%= score.milk_total2 %></p>
-            <p>Milk Design Total: <%= score.milk_total_dsgn %></p>
-            <p>Hygiene Total: <%= score.hygiene_total %></p>
-            <p>Performance Total: <%= score.performance_total %></p>
-            <p>Total Score: <%= score.total_score %></p>
-        </div>
-    <% } %>
+        <!-- Footer -->
+        <footer class="bg-light text-center text-lg-start mt-auto">
+            <div class="text-center p-3">
+                © 2024 KompetisiKopi. All Rights Reserved
+            </div>
+        </footer>
+    
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script>
+            var deleteModal = document.getElementById('deleteModal');
+            deleteModal.addEventListener('show.bs.modal', function (event) {
+                var button = event.relatedTarget; 
+                var eventId = button.getAttribute('data-event-id'); 
 
-    <script>
-        function goBack() {
-            window.location.href = '/event';
-        }
-    </script>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+                var deleteForm = document.getElementById('deleteForm');
+                deleteForm.action = '/api/event/delete/' + eventId + '?_method=DELETE'; 
+            });
+        </script>
 </body>
+
 </html>

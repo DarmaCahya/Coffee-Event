@@ -15,7 +15,7 @@ module.exports = function(app) {
   app.get("/home", authJwt.verifyToken, (req, res) => {
     try{
       const userRole = req.user ? req.user.role : null;
-      res.render("home", {userRole});
+      res.render("home", {userRole, currentPath: req.path});
     } catch (error) {
       res.status(500).send({ message: error.message });
     }

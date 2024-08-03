@@ -50,11 +50,11 @@ exports.signin = async (req, res) => {
         }
 
         console.log("Password is valid, signing token");
-        const token = jwt.sign({ id: user.id, email: user.email, role: user.role }, config.secret, {
+        const token = jwt.sign({ id: user.id, username: user.username, email: user.email, role: user.role}, config.secret, {
             expiresIn: 86400,
         });
-
         req.session.token = token;
+        console.log(token);
         console.log("Token saved in session:", req.session.token);
         return res.redirect('/home');
         
