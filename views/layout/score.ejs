@@ -1,0 +1,117 @@
+<% if (score) { %>
+    <div class="mt-4">
+        <h3 class="fw-bold fs-3">Scores</h3>
+        <p class="fs-5">by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
+        <% if (userRole === "jury" || userRole === "admin") { %>
+        <div class="d-flex justify-content-end mb-3">
+            <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
+            <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+        </div>
+        <% } %>
+        <table class="table table-sm table-striped-columns mb-5">
+            <thead class="fs-5">
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Espresso 1 Total</td>
+                    <td><%= score.espresso_total1 %></td>
+                </tr>
+                <tr>
+                    <td>Espresso 2 Total</td>
+                    <td><%= score.espresso_total2 %></td>
+                </tr>
+                <tr>
+                    <td>Espresso Design Total</td>
+                    <td><%= score.espresso_total_dsgn %></td>
+                </tr>
+                <tr>
+                    <td>Milk 1 Total</td>
+                    <td><%= score.milk_total1 %></td>
+                </tr>
+                <tr>
+                    <td>Milk 2 Total</td>
+                    <td><%= score.milk_total2 %></td>
+                </tr>
+                <tr>
+                    <td>Milk Design Total</td>
+                    <td><%= score.milk_total_dsgn %></td>
+                </tr>
+                <tr>
+                    <td>Hygiene Total</td>
+                    <td><%= score.hygiene_total %></td>
+                </tr>
+                <tr>
+                    <td>Performance Total</td>
+                    <td><%= score.performance_total %></td>
+                </tr>
+                <tr class="table-warning">
+                    <td>Total Score</td>
+                    <td><%= score.total_score %></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+<% } %>
+
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to delete this event?
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <form id="deleteForm" action="" method="POST" style="display:inline;">
+            <input type="hidden" name="_method" value="DELETE">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+<!-- PIN Modal -->
+<div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/event/score/<%= event.id %>/verify" method="POST">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="pin" class="form-label">PIN</label>
+                        <input type="password" class="form-control" id="pin" name="pin" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    var deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        var button = event.relatedTarget; 
+        var eventId = button.getAttribute('data-event-id'); 
+
+        var deleteForm = document.getElementById('deleteForm');
+        deleteForm.action = '/api/event/delete/' + eventId + '?_method=DELETE'; 
+    });
+</script>

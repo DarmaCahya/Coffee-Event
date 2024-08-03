@@ -90,7 +90,7 @@ const espresso_total_dsgn = calculateEspressoTotal(true, true, true, true, true,
 
 const milk_total1 = calculateMilkTotal(true, true, true, true, true);
 const milk_total2 = calculateMilkTotal(true, true, true, true, true);
-const milk_total_dsgn = calculateMilkTotal(true, true, true, true, true);
+const milk_total_dsgn = calculateMilkTotal(true, false, true, true, true);
 
 const hygiene_total = calculateHygieneTotal(6);
 const performance_total = calculatePerformanceTotal(6, 6);
@@ -206,7 +206,7 @@ async function initial() {
     milk_pitcher_waste_end_dsgn: true,
     hygiene_clean_wand: 6,
     performance_org_workspace: 6,
-    performance_overall: 6,
+    performance_overall: 3,
     espresso_total1,
     espresso_total2,
     espresso_total_dsgn,
@@ -219,8 +219,64 @@ async function initial() {
 });
 
 await db.score.create({
-  eventId: 2,
+  eventId: 1,
   userId: 2, 
+  representing: "joko",
+  competitor: "rumah",
+  judge: "alex",
+  espresso_flush_head1: true,
+  espresso_flush_head2: true,
+  espresso_flush_head_dsgn: true,
+  espresso_dry_filter1: true,
+  espresso_dry_filter2: true,
+  espresso_dry_filter_dsgn: true,
+  espresso_spill1: true,
+  espresso_spill2: true,
+  espresso_spill_dsgn: true,
+  espresso_dosing1: true,
+  espresso_dosing2: true,
+  espresso_dosing_dsgn: true,
+  espresso_clean_port1: true,
+  espresso_clean_port2: true,
+  espresso_clean_port_dsgn: true,
+  espresso_brew1: true,
+  espresso_brew2: true,
+  espresso_brew_dsgn: true,
+  espresso_extract_time1: true,
+  espresso_extract_time2: true,
+  espresso_extract_time_dsgn: true,
+  milk_clean_pitcher1: true,
+  milk_clean_pitcher2: true,
+  milk_clean_pitcher_dsgn: true,
+  milk_purge_wand_before1: true,
+  milk_purge_wand_before2: true,
+  milk_purge_wand_before_dsgn: true,
+  milk_clean_wand1: true,
+  milk_clean_wand2: true,
+  milk_clean_wand_dsgn: true,
+  milk_purge_wand_after1: true,
+  milk_purge_wand_after2: true,
+  milk_purge_wand_after_dsgn: true,
+  milk_pitcher_waste_end1: true,
+  milk_pitcher_waste_end2: true,
+  milk_pitcher_waste_end_dsgn: true,
+  hygiene_clean_wand: 3,
+  performance_org_workspace: 3,
+  performance_overall: 6,
+  espresso_total1,
+  espresso_total2,
+  espresso_total_dsgn,
+  milk_total1,
+  milk_total2,
+  milk_total_dsgn,
+  hygiene_total,
+  performance_total,
+  total_score
+});
+
+await db.score.create({
+  eventId: 2,
+  userId: 1, 
   representing: "joko",
   competitor: "rumah",
   judge: "alex",

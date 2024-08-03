@@ -1,7 +1,9 @@
 const controller = require("../controllers/eventController");
+const scoreController = require("../controllers/scoreController");
 const authJwt = require('../middleware/authJWT');
 const db = require("../models");
 const Score = db.score;
+const User = db.user
 
 const setUserInLocals = (req, res, next) => {
     res.locals.user = req.user;
@@ -43,19 +45,27 @@ module.exports = function(app) {
             
             const event = await controller.getEventById(req, res);
             
+            const scores = await Score.findAll({
+                where: {
+                    eventId: id
+                }, include: [{
+                    model: User,
+                    attributes: ['username']                
+                }]
+            });
+            
             const score = await Score.findOne({
                 where: {
                     eventId: id,
                     userId: user.id
                 }
             });
-            console.log(user);  
-    
-            res.render('Event/eventDetail', { user, event, id, userRole, score, currentPath: req.path });
+            
+            res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path });
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
-    });
+    });    
     
     app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {
