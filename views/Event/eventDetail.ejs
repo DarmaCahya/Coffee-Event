@@ -39,30 +39,32 @@
 
     <div class="container mt-5">
         <% if (userRole === "admin") { %>
-            <div class="d-flex mb-3">
-                <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+            <div class="d-flex mb-3 d-md-flex justify-content-md-end">
+                <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>
+                <div class="">
+                    <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+                </div>
             </div>
         <% } %>
 
         <div class="card">
-            <img src="<%= event.image %>" class="card-img-top" alt="image">
-            <div class="card-body">
-                <h1 class="card-title"><%= event.title %></h1>
-                <p class="card-text"><%= event.tag %></p>
+            <img src="<%= event.image %>" class="card-img-top img-fluid" alt="image" style="max-height: 40rem; object-fit: cover;">
+            <div class="card-body mt-4 m-5 mb-1">
+                <h1 class="card-title mb-4"><%= event.title %></h1>
+                <button type="button" class="btn btn-primary disabled mb-3 "><%= event.tag %></button>
                 <p class="card-text"><%= event.description %></p>
                 <p class="card-text">Waktu Pelaksanaan: <%= event.startDate.toDateString() %> sampai <%= event.endDate.toDateString() %></p>
             </div>
+            <% if (userRole === "jury" || userRole === "admin") { %>
+                <button type="button" class="btn btn-primary btn-lg my-4 mx-5 w-25" data-bs-toggle="modal" data-bs-target="#pinModal">
+                    Form Penilaian
+                </button>
+            <% } %>
         </div>
 
-        <% if (userRole === "jury" || userRole === "admin") { %>
-        <button type="button" class="btn btn-primary btn-lg my-5" data-bs-toggle="modal" data-bs-target="#pinModal">
-            Form Penilaian
-        </button>
-        <% } %>
-
-        <div class="winners">
-            <h3 class="text-center fw-bold fs-3">Pemenang Kompetisi</h3>
+        <div class="winners card mb-5">
+            <h3 class="text-center fw-bold m-5 fs-3">Pemenang Kompetisi</h3>
             <div class="my-5 d-flex justify-content-around">
                 <div>
                     <img src="/path/to/trophy.png" alt="Trophy Image">
@@ -79,37 +81,50 @@
             </div>
         </div>
 
-        <% if (userRole === "jury") { %>
-            <%- include('../layout/score') %>
-        <% } else if (userRole === "admin") { %>
-            <h3 class="fw-bold fs-3">List Scores</h3>
-            <% if (scores && scores.length > 0) { %>
-                <table class="table table-sm table-striped-columns mb-5">
-                    <thead class="fs-5">
-                        <tr>
-                            <th scope="col">Name Jury</th>
-                            <th scope="col">Score</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% scores.forEach(function(scoreList) { %>
-                            <tr>    
-                                <td><%= score.User ? score.User.username : 'Unknown' %></td>
-                                <td><%= scoreList.total_score %></td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
-            <% } else { %>
-                <p>No scores available for this event.</p>
-            <% } %>
-        <% } else { %>
-            <div class="mt-4">
-                <h3>Login Juri</h3>
-                <p>Untuk juri silahkan login disini, <a href="/signin">Login</a></p>
+        <div class="card mb-5">
+            <div class="m-5 mb-1">
+                <h3 class="fw-bold fs-3 mb-3">List Scores</h3>
+                <% if (userRole === "jury") { %>
+                    <%- include('../layout/score') %>
+                <% } else if (userRole === "admin") { %>
+                    <% if (scores && scores.length > 0) { %>
+                        <table class="table table-hover table-sm table-striped-columns mb-5">
+                            <caption>List of scores</caption>
+                            <thead class="fs-5 table-light">
+                                <tr>
+                                    <th scope="row">No</th>
+                                    <th scope="col">Name Jury</th>
+                                    <th scope="col">Score</th>
+                                    <th scope="col">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-group-divider">
+                                <% scores.forEach(function(scoreList, index) { %>
+                                    <tr>    
+                                        <th><%= index + 1 %></th>
+                                        <td><%= score.judge %></td>
+                                        <td><%= scoreList.total_score %></td>
+                                        <td class=" mb-3">
+                                            <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
+                                            <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-danger">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            </tbody>
+                        </table>
+                    <% } else { %>
+                        <p>No scores available for this event.</p>
+                    <% } %>
+                <% } else { %>
+                    <div class="mt-4">
+                        <h3>Login Juri</h3>
+                        <p>Untuk juri silahkan login disini, <a href="/signin">Login</a></p>
+                    </div>
+                <% } %>
             </div>
-        <% } %>
-
+        </div>
     </div>
 
         <!-- Footer -->
@@ -119,6 +134,29 @@
             </div>
         </footer>
     
+        <!-- PIN Modal -->
+        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/event/score/<%= event.id %>/verify" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="pin" class="form-label">PIN</label>
+                                <input type="password" class="form-control" id="pin" name="pin" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 

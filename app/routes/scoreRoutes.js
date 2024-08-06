@@ -47,6 +47,7 @@ module.exports = function(app) {
     app.get("/event/score/:id/form", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
         try {
             const userId = req.user.id;
+            const user = req.user;
             const userRole = req.user ? req.user.role : null;
             const id = req.params.id;
             const event = await Event.findByPk(id);
@@ -54,7 +55,7 @@ module.exports = function(app) {
                 return res.status(404).send({ message: 'Event not found' });
             }
     
-            res.render('Scores/form', {id, userRole, userId});
+            res.render('Scores/form', {id, user, userRole, userId});
         } catch (error) {
             res.status(500).send({ message: error.message });
         }

@@ -1,7 +1,9 @@
 <% if (score) { %>
     <div class="mt-4">
-        <h3 class="fw-bold fs-3">Scores</h3>
-        <p class="fs-5">by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
+        <% if (userRole === "jury") { %>
+            <p class="fs-5">Score by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
+        <% } %>
+
         <% if (userRole === "jury" || userRole === "admin") { %>
         <div class="d-flex justify-content-end mb-3">
             <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
@@ -81,29 +83,7 @@
     </div>
 </div>
 
-<!-- PIN Modal -->
-<div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form action="/event/score/<%= event.id %>/verify" method="POST">
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="pin" class="form-label">PIN</label>
-                        <input type="password" class="form-control" id="pin" name="pin" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
+
 
 <script>
     var deleteModal = document.getElementById('deleteModal');

@@ -113,7 +113,7 @@ async function initial() {
   });
 
   await db.event.create({
-    image: "image",
+    image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship",
     description: "A championship to find the best coffee brewer.",
     tag: "completed",
@@ -123,9 +123,9 @@ async function initial() {
   });
 
   await db.event.create({
-    image: "image",
+    image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship2",
-    description: "A championship to find the best coffee brewer.",
+    description: "A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.",
     tag: "on-going",
     startDate: new Date(),
     endDate: new Date(),
@@ -133,7 +133,7 @@ async function initial() {
   });
 
   await db.event.create({
-    image: "image",
+    image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship3",
     description: "A championship to find the best coffee brewer.",
     tag: "upcoming",
@@ -143,7 +143,7 @@ async function initial() {
   });
 
   await db.event.create({
-    image: "image",
+    image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship4",
     description: "A championship to find the best coffee brewer.",
     tag: "completed",
@@ -153,7 +153,7 @@ async function initial() {
   });
 
   await db.event.create({
-    image: "image",
+    image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship5",
     description: "A championship to find the best coffee brewer.",
     tag: "on-going",

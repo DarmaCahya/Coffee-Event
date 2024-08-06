@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Espresso and Milk Sections</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
     <style>
         .total-score {
             background-color: yellow;
@@ -13,22 +14,24 @@
     </style>
 </head>
 <body>
-    <button onclick="goBack()"> <- </button>
+    <a href="/event/<%= id %>" class="btn btn-secondary">
+        <i class="bi bi-arrow-left"></i> Back
+    </a>
 
     <div class="container border">
         <form id="scoreForm" action="/api/score/<%= id %>/create" method="POST">
             <div class="row mb-3">
                 <div class="col">
                     <label for="inputRepresenting" class="form-label">Representing</label>
-                    <input type="text" class="form-control" id="inputRepresenting" name="representing" required>
+                    <input type="text" class="form-control" id="inputRepresenting" name="representing" placeholder="masukkan nama peserta" required>
                 </div>
                 <div class="col">
                     <label for="inputCompetitor" class="form-label">Competitor</label>
-                    <input type="text" class="form-control" id="inputCompetitor" name="competitor" required>
+                    <input type="text" class="form-control" id="inputCompetitor" name="competitor" placeholder="masukkan nama competitor" required>
                 </div>
                 <div class="col">
                     <label for="inputJudge" class="form-label">Judge</label>
-                    <input type="text" class="form-control" id="inputJudge" name="judge" required>
+                    <input type="text" class="form-control" id="inputJudge" name="judge" value="<%= user.username %>" placeholder="masukkan nama juri"  required>
                 </div>
             </div>
             <input type="hidden" name="eventId" value="<%= id %>">
