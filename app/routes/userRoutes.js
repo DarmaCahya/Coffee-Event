@@ -10,8 +10,6 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
-
   app.get("/home", authJwt.verifyToken, (req, res) => {
     try{
       const userRole = req.user ? req.user.role : null;

@@ -33,21 +33,29 @@
     <button class="navbar-toggler mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <% if (userRole === "admin" && currentPath !== "/admin/dashboard") { %>
-        <div class="nav-item m-2">
-          <form action="/admin/dashboard" method="GET" class="d-inline">
-            <button type="submit" class="btn mx-2 fs-4 btn-primary">Admin Page</button>
+    <div class="collapse navbar-collapse justify-content-end mt-2" id="navbarNav">
+      <% if (userRole === "admin") { %>
+        <div class="nav-item m-2 mt-2">
+          <% if (currentPath !== "/admin/dashboard") { %>
+            <form action="/admin/dashboard" method="GET" class="d-inline">
+              <button type="submit" class="btn mx-2 fs-4 btn-primary">Admin Page</button>
+            </form>
+          <% } %>
+          <% if (currentPath === "/admin/dashboard") { %>
+          <form action="/admin/signup" method="GET" class="d-inline">
+            <button type="submit" class="btn mx-2 fs-4 btn-primary">Create Jury</button>
           </form>
+          <% } %>
         </div>
       <% } %>
 
+      <% if (currentPath !== "/home") { %>
+        <div class="nav-item m-2 mt-2">
+          <a class="btn btn-outline-success mx-2 fs-4" href="/home" role="button">Beranda</a>
+        </div>
+      <% } %>
+      
       <ul class="navbar-nav mt-2">
-        <% if (currentPath !== "/home") { %>
-          <li class="nav-item m-2 mt-0">
-            <a class="btn btn-outline-success mx-2 fs-4" href="/home" role="button">Beranda</a>
-          </li>
-        <% } %>
         <li class="nav-item mx-2">
           <a class="btn fs-4" href="/home#wheel" role="button">Coffee Wheel</a>
         </li>
@@ -59,7 +67,7 @@
         </li>
       </ul>
 
-      <div class="nav-item mx-2">
+      <div class="nav-item mx-2 mt-2">
         <% if (userRole === "guest") { %>
           <form action="/signin" method="GET" class="d-inline">
             <button type="submit" class="btn fs-4">Login</button>

@@ -48,24 +48,29 @@ module.exports = function(app) {
             const scores = await Score.findAll({
                 where: {
                     eventId: id
-                }, include: [{
+                }, 
+                include: [{
                     model: User,
                     attributes: ['username']                
                 }]
             });
             
-            const score = await Score.findOne({
-                where: {
-                    eventId: id,
-                    userId: user.id
-                }
-            });
-            
+            let score = null;
+    
+            if (userRole !== "guest") {
+                score = await Score.findOne({
+                    where: {
+                        eventId: id,
+                        userId: user.id
+                    }
+                });
+            }
+    
             res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path });
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
-    });    
+    });        
     
     app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {

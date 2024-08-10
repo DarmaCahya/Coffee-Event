@@ -2,7 +2,6 @@ const config = require("../config/dbConfig.js");
 
 const Sequelize = require("sequelize");
 const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
-  port: 3307,
   host: config.HOST,
   dialect: config.dialect,
   pool: {
