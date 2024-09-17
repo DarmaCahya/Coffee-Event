@@ -5,9 +5,9 @@ const Op = db.Sequelize.Op;
 
 exports.createEvent = async (req, res) => {
     try {
-        const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
+        const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin, adminEvent  } = req.body;
         
-        if (!image || !title || !description || !tag || !startDate || !endDate || !pin) {
+        if (!image || !title || !description || !tag || !startDate || !endDate || !pin || !adminEvent ) {
             return res.status(400).json({ message: "All fields are required." });
         }
 
@@ -26,7 +26,7 @@ exports.createEvent = async (req, res) => {
         }
 
         const newEvent = await Event.create({
-            image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
+            image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin, userId: adminEvent 
         });
         res.redirect('/admin/dashboard');
     } catch (error) {
@@ -43,11 +43,9 @@ exports.getEvent = async () => {
     }
 };
 
-exports.getEventById = async (req, res) => {
-    const id = req.params.id;
-    const userId = req.userId;
+exports.getEventById = async (eventId) => {
     try {
-        const event = await Event.findByPk(id);
+        const event = await Event.findByPk(eventId);
         if (!event) {
             throw new Error("Event not found.");
         }
@@ -68,7 +66,7 @@ exports.deleteEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            return res.redirect("/admin/dashboard");
+            return res.redirect("/event");
         } else {
             return res.json({ success: false, message: `Cannot delete Event with id=${id}. Maybe Event was not found!` });
         }

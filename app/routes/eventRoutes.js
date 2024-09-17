@@ -24,8 +24,8 @@ module.exports = function(app) {
     app.post("/api/event/search", controller.searchEvent);
     app.get("/api/event", controller.getEvent);
     app.get("/api/event/:id", controller.getEventById);
-    app.delete("/api/event/delete/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteEvent);
-    app.put('/api/event/update/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.updateEvent);
+    app.delete("/api/event/delete/:id", [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], controller.deleteEvent);
+    app.put('/api/event/update/:id', [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], controller.updateEvent);
 
     app.get("/event", authJwt.verifyToken, async (req, res) => {
         try {
@@ -43,7 +43,7 @@ module.exports = function(app) {
             const user = req.user;
             const id = req.params.id;
             
-            const event = await controller.getEventById(req, res);
+            const event = await controller.getEventById(id);
             
             const scores = await Score.findAll({
                 where: {

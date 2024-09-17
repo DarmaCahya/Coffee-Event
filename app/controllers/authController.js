@@ -11,11 +11,11 @@ exports.signup = async (req, res) => {
         username: req.body.username,
         email: req.body.email,
         password: bcrypt.hashSync(req.body.password, 8), 
-        role: "jury"
+        role: req.body.role
         });
 
         if (user) {
-        res.redirect("/admin/event");
+        res.redirect("/admin/dashboard");
         }
     } catch (error) {
         res.status(500).send({ message: error.message });
@@ -34,7 +34,7 @@ exports.signin = async (req, res) => {
 
         if (!user) {
             console.log("No user found with email:", email);
-            return res.status(404).send({ message: "User Not found." });
+            return res.redirect('/signin?error=UserNotFound');
         }
 
         console.log("User found, checking password validity");
@@ -43,10 +43,7 @@ exports.signin = async (req, res) => {
 
         if (!passwordIsValid) {
             console.log("Invalid password for user:", email);
-            return res.status(401).send({
-                accessToken: null,
-                message: "Invalid Password!",
-            });
+            return res.redirect('/signin?error=InvalidPassword');
         }
 
         console.log("Password is valid, signing token");

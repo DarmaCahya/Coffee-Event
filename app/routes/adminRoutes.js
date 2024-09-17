@@ -1,6 +1,8 @@
 const { authJwt } = require("../middleware");
 const eventController = require("../controllers/eventController");
 const scoreController = require("../controllers/scoreController");
+const db = require("../models");
+const User = db.user;
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -33,20 +35,26 @@ module.exports = function(app) {
 
     app.get("/admin/event/create", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
         try {
-            res.render('Admin/createEvent');
+          const adminEvents = await User.findAll({ where: { role: 'admin event' } });
+          res.render('Admin/createEvent', {adminEvents});
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
     });
 
-    app.get("/admin/event/:id", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) => {
+    app.get("/admin/event/:id", [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], async (req, res) => {
         try {
-            const id = req.params
-            const event = await eventController.getEventById(req, res);
-            res.render("Admin/updateEvent", { event, id});
+          const eventId = req.params.id;  
+          const event = await eventController.getEventById(eventId); 
+      
+          if (!event) {
+            return res.status(404).send({ message: "Event not found." });
+          }
+      
+          res.render("Admin/updateEvent", { event, eventId });
         } catch (error) {
-            res.status(500).send({ message: error.message });
+          res.status(500).send({ message: error.message });
         }
-    });
+      });      
 
 };

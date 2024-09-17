@@ -4,9 +4,9 @@
             <p class="fs-5">Score by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
         <% } %>
 
-        <% if (userRole === "jury" || userRole === "admin") { %>
+        <% if (userRole === "jury" || userRole === "admin" || userRole === "admin event") { %>
         <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
+            <button class="btn btn-warning me-4 " onclick="location.href='/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
             <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
                 <button type="submit" class="btn btn-danger">Delete</button>
             </form>

@@ -61,7 +61,7 @@ module.exports = function(app) {
         }
     });
 
-    app.get("/admin/event/:id/score/:idScore", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
+    app.get("/event/:id/score/:idScore", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
         try {
             const id = req.params.id;
             const idScore = req.params.idScore;

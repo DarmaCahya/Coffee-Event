@@ -27,6 +27,7 @@ db.score.belongsTo(db.event, { foreignKey: "eventId", onDelete: "CASCADE" });
 db.user.hasMany(db.score, { foreignKey: "userId", onDelete: "CASCADE" });
 db.score.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE" });
 
-db.ROLES = ["jury", "admin"];
+db.user.hasMany(db.event, { foreignKey: "userId", onDelete: "CASCADE" });
+db.event.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE" });
 
 module.exports = db;

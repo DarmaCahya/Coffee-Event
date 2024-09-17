@@ -40,7 +40,7 @@ db.sequelize.sync({force: true}).then(() => {
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.status(404).send({message: "welcome coffee competition"});
+  res.redirect('/home');
 });
 
 app.use((req, res, next) => {
@@ -112,7 +112,22 @@ async function initial() {
     role: "jury"
   });
 
+  await db.user.create({
+    username: "heho",
+    email: "event1@gmail.com",
+    password: bcrypt.hashSync("securepassword"),
+    role: "admin event"
+  });
+
+  await db.user.create({
+    username: "heho",
+    email: "event12@gmail.com",
+    password: bcrypt.hashSync("securepassword"),
+    role: "admin event"
+  });
+
   await db.event.create({
+    userId: 1,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship",
     description: "A championship to find the best coffee brewer.",
@@ -123,6 +138,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 3,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship2",
     description: "A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.",
@@ -133,6 +149,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 1,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship3",
     description: "A championship to find the best coffee brewer.",
@@ -143,6 +160,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 1,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship4",
     description: "A championship to find the best coffee brewer.",
@@ -153,6 +171,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 1,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship5",
     description: "A championship to find the best coffee brewer.",
