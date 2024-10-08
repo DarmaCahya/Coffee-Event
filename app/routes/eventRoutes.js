@@ -54,7 +54,8 @@ module.exports = function(app) {
                     attributes: ['username']                
                 }]
             });
-            
+            console.log(scores);
+
             let score = null;
     
             if (userRole !== "guest") {

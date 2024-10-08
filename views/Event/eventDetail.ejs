@@ -112,13 +112,13 @@
                                 <% scores.forEach(function(scoreList, index) { %>
                                     <tr>    
                                         <th><%= index + 1 %></th>
-                                        <td><%= score.judge %></td>
+                                        <td><%= scoreList.judge %></td>
                                         <td><%= scoreList.total_score %></td>
                                         <td class=" mb-3">
-                                            <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
-                                            <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
+                                            <button class="btn btn-warning me-4" onclick="location.href='/event/ <%= event.id %>/score/ <%= scoreList.id %>'">Update</button>
+                                            <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display:inline;">
                                                 <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>
+                                            </form>                                            
                                         </td>
                                     </tr>
                                 <% }) %>

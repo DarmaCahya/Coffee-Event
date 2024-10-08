@@ -18,7 +18,7 @@ module.exports = function(app) {
     app.get("/api/scores", [authJwt.verifyToken, authJwt.isAdmin], controller.getScores);
     app.get("/api/event/:eventId/score/:scoreId", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.getScoreById);
     app.post("/admin/event/:id/score/:idScore/update", [authJwt.verifyToken, authJwt.isAdminOrJury], controller.updateScore);
-    app.delete("/api/score/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteScore);
+    app.delete("/api/event/:eventId/scores/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteScore);
     app.post("/api/scores/search", [authJwt.verifyToken, authJwt.isAdmin], controller.searchScores);
 
 

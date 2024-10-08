@@ -279,6 +279,7 @@ exports.getScoreById = async (req, res) => {
 
 exports.deleteScore = async (req, res) => {
     const id = req.params.id;
+    const eventId = req.params.eventId;
 
     try {
         const num = await Score.destroy({
@@ -286,12 +287,12 @@ exports.deleteScore = async (req, res) => {
         });
 
         if (num == 1) {
-            res.send({ message: "Score was deleted successfully!" });
+            res.redirect(`/event/${eventId}`); 
         } else {
-            res.send({ message: `Cannot delete Score with id=${id}. Maybe Score was not found!` });
+            res.status(404).send({ message: `Cannot delete Score with id=${id}. Score not found!` });
         }
     } catch (err) {
-        res.status(500).send({ message: `Could not delete Score with id=${id}` });
+        res.status(500).send({ message: `Could not delete Score with id=${id}.`, error: err });
     }
 };
 
