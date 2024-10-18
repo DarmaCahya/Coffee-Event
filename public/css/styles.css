@@ -1,7 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap');
+@import url('https://unpkg.com/aos@2.3.1/dist/aos.css');
 
-body {
+html,body {
+    overflow-x: hidden;
+}
+
+.font-jakarta-sans {
     font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.font-jakarta-sans-extra-bold {
+    font-weight: 800;
 }
 
 .kopi-section {
@@ -19,14 +28,16 @@ h1{
 }
 
 .title {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 2rem;
     color: #2d6a4f; /* Dark green */
 }
 
 .description {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: #6c757d; /* Grey */
+    max-width: 300px;
+    margin: 10px auto 0;
+    
 }
 
 .image-container {
@@ -45,4 +56,111 @@ h1{
     font-size: 0.875rem;
     color: #6c757d;
     margin-top: 10px;
+}
+
+.text-green-primary {
+    color: rgb(45, 106, 79);
+}
+
+.text-green-beige {
+    color: #97A259
+}
+
+.bg-beige {
+    background-color: #FFFAF3;
+}
+
+.hero-splash {
+    position: absolute;
+    top: 0px;
+    left: 270px;
+}
+
+.text-dark-grey {
+    color : #525252
+}
+
+.hero-section-title {
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+.blur-circle {
+    position: absolute; /* Position the circle absolutely */
+    top: 150px;
+    width: 200px;      /* Adjust the size of the circle */
+    height: 100px;     /* Same as width for a perfect circle */
+    background: rgba(0, 255, 173, 0.1); /* Semi-transparent background */
+    border-radius: 50%; /* Make it circular */
+    filter: blur(30px); /* Apply the blur effect */
+    transform: translate(-50%, -50%); /* Center the circle */
+    z-index: 1;        /* Position behind the heading */
+}
+
+#about {
+    background-image: url("/images/bg-grey.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+#vis {
+    transform: scale(0.45);
+    
+}
+
+.text-justify {
+    text-align: justify;
+}
+
+@media (min-width: 576px) { /* Small devices (≥576px) */
+    #vis {
+    transform: scale(0.7);
+    }
+}
+
+@media (min-width: 768px) { /* Medium devices (≥768px) */
+    #vis {
+    transform: scale(0.8);
+    }
+
+    .title {
+        font-size: 3rem;
+    }
+
+    .hero-section-title {
+        margin: 0;
+    }
+
+    .description {
+        font-size: 1.15rem;
+        max-width: 350px;
+        margin: 10px 0;
+    }
+
+    .hero-splash {
+        top: -60px;
+        left: 240px;
+    }
+}
+
+@media (min-width: 992px) { /* Medium devices (≥768px) */
+    .hero-splash {
+        top: -60px;
+        left: 400px;
+    }
+
+    .hero-section-title {
+        max-width: 450px;
+        margin: 0;
+    }
+
+    .title {
+        font-size: 3rem;
+    }
+
+    .description {
+        font-size: 1.15rem;
+        max-width: 500px;
+        margin: 20px 0;
+    }
 }

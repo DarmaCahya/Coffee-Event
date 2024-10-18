@@ -25,13 +25,14 @@
             text-align: center;
         }
     </style>
+    <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
     <%- include('../layout/navbar') %>
 
     <div class="content">
         <!-- Konten utama di sini -->
-        <h1 class="text-center m-5 fw-bold text-secondary">Event KompetisiKopi</h1>
+        <h1 class="text-center m-5 text-green-primary font-jakarta-sans font-jakarta-sans-extra-bold">Event KompetisiKopi</h1>
 
         <div class="d-flex justify-content-center mb-4">
             <form action="/event/search" method="POST" class="d-flex me-3" role="search">
@@ -69,7 +70,7 @@
                             <div class="card" style="height: 33rem;">
                                 <a href="/event/<%= event.id %>" class="card-link" style="text-decoration: none; color: black;">
                                     <div>
-                                        <img src="<%= event.image || 'https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg'%>" class="card-img-top " alt="Event Image" style="max-height: 20rem; object-fit: cover;" onerror="this.onerror=null; this.src='https://i.ibb.co/rFTHdxG/coffee-cup.jpg';">
+                                        <img src="https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg" class="card-img-top " alt="Event Image" style="max-height: 20rem; object-fit: cover;" onerror="this.onerror=null; this.src='https://i.ibb.co/rFTHdxG/coffee-cup.jpg';">
                                         <div class="card-body">
                                             <h5 class="card-title fs-4"><%= event.title %></h5>
                                             <p class="card-text fs-5 text-truncate"><%= event.description %></p>
@@ -87,7 +88,9 @@
                         </div>
                     <% }) %>
                 <% } else { %>
-                    <!-- No events found message or empty state -->
+                    <div>
+                        <p>Belum ada event nih</p>
+                    </div>
                 <% } %>
             </div>
         </div>

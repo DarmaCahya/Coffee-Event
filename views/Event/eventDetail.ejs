@@ -40,11 +40,11 @@
 <body>
     <%- include('../layout/navbar') %>
 
-    <a href="/event/" class="btn btn-secondary ms-5" style="width: 15vh;">
+    <a href="/event/" class="btn btn-secondary ms-5 mt-5" style="width: 15vh;">
         <i class="bi bi-arrow-left"></i> Back
     </a>
     
-    <div class="container mt-5">
+    <div class="container mt-4">
         <% if (userRole === "admin" || userRole === "admin event") { %>
             <div class="d-flex mb-3 d-md-flex justify-content-md-end">
                 <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>

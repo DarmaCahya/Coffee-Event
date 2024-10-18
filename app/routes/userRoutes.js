@@ -1,5 +1,6 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/userController");
+const eventController = require("../controllers/eventController");
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,10 +11,11 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/home", authJwt.verifyToken, (req, res) => {
+  app.get("/home", authJwt.verifyToken, async (req, res) => {
     try{
       const userRole = req.user ? req.user.role : null;
-      res.render("home", {userRole, currentPath: req.path});
+      const events = await eventController.getEvent();
+      res.render("home", {userRole,events, currentPath: req.path});
     } catch (error) {
       res.status(500).send({ message: error.message });
     }
