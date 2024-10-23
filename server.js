@@ -102,28 +102,32 @@ async function initial() {
     username: "john_doe",
     email: "john@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "admin"
+    role: "admin",
+    is_active: 1
   });
 
   await db.user.create({
     username: "heho",
     email: "john12@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "jury"
+    role: "jury",
+    is_active: 1
   });
 
   await db.user.create({
     username: "heho",
     email: "event1@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "admin event"
+    role: "admin event",
+    is_active: 1
   });
 
   await db.user.create({
     username: "heho",
     email: "event12@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "admin event"
+    role: "admin event",
+    is_active: 1
   });
 
   await db.event.create({

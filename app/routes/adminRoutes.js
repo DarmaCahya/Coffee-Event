@@ -23,16 +23,6 @@ module.exports = function(app) {
     }
   })
 
-  app.get("/admin/event/:id/scores", [authJwt.verifyToken, authJwt.isAdmin], async (req,res) => {
-    try{
-        const eventId = req.params.id;
-        const score = await scoreController.getScores(eventId);
-        res.render("Admin/dashboard", {score});
-    }catch (error) {
-        res.status(500).send({ message: error.message });
-    }
-  })
-
     app.get("/admin/event/create", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
         try {
           const adminEvents = await User.findAll({ where: { role: 'admin event' } });
@@ -55,6 +45,21 @@ module.exports = function(app) {
         } catch (error) {
           res.status(500).send({ message: error.message });
         }
-      });      
+      });
+
+  app.get("/admin/users", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
+    try{
+      const users = await User.findAll();
+      const usersJury = users.filter(user => user.role === "jury");
+      const usersAdminEvent = users.filter(user => user.role === "admin event");
+
+      const userRole = req.user ? req.user.role : "guest";
+      res.render('Admin/manageUser', {userRole, usersJury, usersAdminEvent, currentPath: req.path});
+    } catch (error) {
+      res.status(500).send({ message: error.message });
+    }
+  }); 
+  
+  app.put("/admin/deactivate/:id", [authJwt.verifyToken, authJwt.isAdmin, authJwt.deactiveAccount]);
 
 };

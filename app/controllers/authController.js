@@ -8,17 +8,19 @@ const bcrypt = require("bcryptjs");
 exports.signup = async (req, res) => {
     try {
         const user = await User.create({
-        username: req.body.username,
-        email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8), 
-        role: req.body.role
+            username: req.body.username,
+            email: req.body.email,
+            password: bcrypt.hashSync(req.body.password, 8), 
+            role: req.body.role,
+            is_active: 1
         });
 
         if (user) {
-        res.redirect("/admin/dashboard");
+            res.redirect("/admin/dashboard");
         }
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(500).send({message: "Terjadi kesalahan saat sign-up.",
+    });
     }
 };
 
@@ -35,6 +37,10 @@ exports.signin = async (req, res) => {
         if (!user) {
             console.log("No user found with email:", email);
             return res.redirect('/signin?error=UserNotFound');
+        }
+
+        if (user.is_active === 0) {
+            return res.status(403).send({ message: "Akun Anda telah dinonaktifkan." });
         }
 
         console.log("User found, checking password validity");
@@ -56,8 +62,7 @@ exports.signin = async (req, res) => {
         return res.redirect('/home');
         
     } catch (error) {
-        console.log("Error during sign-in:", error.message);
-        res.status(500).send({ message: error.message });
+        res.status(500).send({ message: "Error saat sign-in:"});
     }
 };
 
@@ -66,7 +71,7 @@ exports.signout = async (req, res) => {
         console.log("User during signout:", req.user);
         if (!req.user) {
             return res.status(400).send({
-                message: "No user is currently signed in."
+                message: "Tidak ada pengguna yang sedang sign-in."
             });
         }
 
@@ -76,8 +81,7 @@ exports.signout = async (req, res) => {
         return res.redirect("/home");
     } catch (err) {
         res.status(500).send({
-            message: "An error occurred during sign out.",
-            error: err.message
+            message: "Terjadi kesalahan saat sign-out.",
         });
     }
 };

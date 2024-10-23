@@ -158,6 +158,34 @@ isAdminOrJury = (req, res, next) => {
         });
     }
   };  
+  
+  deactiveAccount = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await User.findByPk(userId);
+  
+      if (!user) {
+        return res.status(404).send({ message: "User not found." });
+      }
+  
+      // Prevent deactivating admin accounts
+      if (user.role === "admin") {
+        return res.status(403).send({ message: "Cannot deactivate admin account" });
+      }
+  
+      // Check if the account is already deactivated
+      if (user.is_active === 0) {
+        return res.status(400).send({ message: "This account has already been deactivated." });
+      }
+  
+      // Deactivate account
+      await User.update({ is_active: 0 }, { where: { id: userId } });
+      return res.status(200).send({ message: "Successfully deactivated account" });
+      
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
 
 const authJwt = {
     verifyToken: verifyToken,
@@ -166,6 +194,7 @@ const authJwt = {
     isJury: isJury,
     isAdminOrJury: isAdminOrJury,
     isAdminOrAdminEvent: isAdminOrAdminEvent,
+    deactiveAccount: deactiveAccount
 };
 
 module.exports = authJwt;
