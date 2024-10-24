@@ -29,9 +29,10 @@ module.exports = function(app) {
 
     app.get("/event", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userId = req.userId
+            const userRole = req.user ? req.user.role : "guest";
             const events = await controller.getEvent();
-            res.render('Event/event', { events, userRole, currentPath: req.path});
+            res.render('Event/event', { userId, events, userRole, currentPath: req.path});
         } catch (error) {
             res.status(500).send({ message: error.message });
         }
@@ -39,7 +40,7 @@ module.exports = function(app) {
 
     app.get("/event/:id", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userRole = req.user ? req.user.role : "guest";
             const user = req.user;
             const id = req.params.id;
             
@@ -75,7 +76,7 @@ module.exports = function(app) {
     
     app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userRole = req.user ? req.user.role : "guest";
             const events = await controller.searchEvent(req, res);
             res.render('Event/event', { events, userRole, currentPath: req.path});
         } catch (error) {

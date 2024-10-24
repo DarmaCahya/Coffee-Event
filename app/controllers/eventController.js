@@ -114,7 +114,7 @@ exports.updateEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            res.redirect(`/admin/dashboard`);
+            res.redirect(`/event/${id}`);
         } else {
             res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
         }

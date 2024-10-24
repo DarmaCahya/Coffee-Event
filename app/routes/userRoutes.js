@@ -13,7 +13,7 @@ module.exports = function(app) {
 
   app.get("/home", authJwt.verifyToken, async (req, res) => {
     try{
-      const userRole = req.user ? req.user.role : null;
+      const userRole = req.user ? req.user.role : "guest";
       const events = await eventController.getEvent();
       res.render("home", {userRole,events, currentPath: req.path});
     } catch (error) {

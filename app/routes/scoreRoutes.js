@@ -48,7 +48,7 @@ module.exports = function(app) {
         try {
             const userId = req.user.id;
             const user = req.user;
-            const userRole = req.user ? req.user.role : null;
+            const userRole = req.user ? req.user.role : "guest";
             const id = req.params.id;
             const event = await Event.findByPk(id);
             if (!event) {

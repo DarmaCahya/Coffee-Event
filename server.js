@@ -31,6 +31,7 @@ require('./app/routes/userRoutes')(app);
 require('./app/routes/eventRoutes')(app);
 require('./app/routes/scoreRoutes')(app);
 require('./app/routes/adminRoutes')(app);
+require('./app/routes/coffeeRoutes')(app);
 
 const db = require("./app/models");
 db.sequelize.sync({force: true}).then(() => {
@@ -107,7 +108,7 @@ async function initial() {
   });
 
   await db.user.create({
-    username: "heho",
+    username: "hehojury",
     email: "john12@gmail.com",
     password: bcrypt.hashSync("securepassword"),
     role: "jury",
@@ -115,7 +116,7 @@ async function initial() {
   });
 
   await db.user.create({
-    username: "heho",
+    username: "heho12",
     email: "event1@gmail.com",
     password: bcrypt.hashSync("securepassword"),
     role: "admin event",
@@ -131,7 +132,7 @@ async function initial() {
   });
 
   await db.event.create({
-    userId: 1,
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship",
     description: "A championship to find the best coffee brewer.",
@@ -153,7 +154,7 @@ async function initial() {
   });
 
   await db.event.create({
-    userId: 1,
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship3",
     description: "A championship to find the best coffee brewer.",
@@ -164,7 +165,7 @@ async function initial() {
   });
 
   await db.event.create({
-    userId: 1,
+    userId: 3,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship4",
     description: "A championship to find the best coffee brewer.",
@@ -175,7 +176,7 @@ async function initial() {
   });
 
   await db.event.create({
-    userId: 1,
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship5",
     description: "A championship to find the best coffee brewer.",

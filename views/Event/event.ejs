@@ -78,10 +78,12 @@
                                         </div>
                                     </div>
                                 </a>
-                                <% if (userRole === "admin" && currentPath === "/admin/dashboard") { %>
+                                <% if ((userRole === "admin" && currentPath === "/admin/dashboard") || (userRole === "admin event" && event.userId === userId) ) { %>
                                     <div class="d-flex justify-content-center mb-3">
                                         <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                                        <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+                                        <% } %>
                                     </div>
                                 <% } %>
                             </div>

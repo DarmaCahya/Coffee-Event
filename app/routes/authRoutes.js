@@ -24,7 +24,7 @@ module.exports = function(app) {
     app.post("/api/auth/signout", authJwt.verifyToken, controller.signout);
 
     app.get("/admin/signup", [authJwt.verifyToken, authJwt.isAdmin], (req, res) => {
-        const userRole = req.user ? req.user.role : null;
+        const userRole = req.user ? req.user.role : "guest";
         res.render("Authentication/signup", { userRole, currentPath: req.path });
     });    
     

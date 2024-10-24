@@ -32,8 +32,18 @@ module.exports = function(app) {
         }
     });
 
+    app.get("/admin/coffee/create", [authJwt.verifyToken, authJwt.isAdmin], async (req, res) =>{
+      try {
+        res.render('Coffee/create-coffee');
+      } catch (error) {
+          res.status(500).send({ message: error.message });
+      }
+    });
+
     app.get("/admin/event/:id", [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], async (req, res) => {
         try {
+          const userRole = req.user ? req.user.role : "guest";
+          const adminEvents = await User.findAll({ where: { role: 'admin event' } });
           const eventId = req.params.id;  
           const event = await eventController.getEventById(eventId); 
       
@@ -41,7 +51,7 @@ module.exports = function(app) {
             return res.status(404).send({ message: "Event not found." });
           }
       
-          res.render("Admin/updateEvent", { event, eventId });
+          res.render("Admin/updateEvent", { event, eventId, adminEvents, userRole});
         } catch (error) {
           res.status(500).send({ message: error.message });
         }
