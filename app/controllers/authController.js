@@ -36,7 +36,7 @@ exports.signin = async (req, res) => {
 
         if (!user) {
             console.log("No user found with email:", email);
-            return res.redirect('/signin?error=UserNotFound');
+            return res.redirect('/signin?error=User tidak ditemukan');
         }
 
         if (user.is_active === 0) {

@@ -42,7 +42,7 @@ module.exports = function(app) {
       });
       const events = await Event.findAll();
       const userRole = req.user ? req.user.role : "guest";
-      res.render("History", {userRole, scores, events});
+      res.render("History", {userRole, userId, scores, events});
     } catch (error) {
       res.status(500).send({ message: error.message });
     }

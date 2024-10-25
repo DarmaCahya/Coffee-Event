@@ -10,19 +10,19 @@ exports.createScore = async (req, res) => {
 
         const event = await Event.findByPk(eventId);
         if (!event) {
-            return res.status(404).json({ message: 'Event not found' });
+            return res.status(404).json({ message: 'Event tidak ditemukan' });
         }
 
-        const existingScore = await Score.findOne({
-            where: {
-                eventId: eventId,
-                userId: userId
-            }
-        });
+        // const existingScore = await Score.findOne({
+        //     where: {
+        //         eventId: eventId,
+        //         userId: userId
+        //     }
+        // });
 
-        if(existingScore){
-            return res.status(400).json({ message: 'You have already submitted an evaluation for this event.' });
-        }
+        // if(existingScore){
+        //     return res.status(400).json({ message: 'Anda telah memberikan penilaian untuk event ini' });
+        // }
 
         const {
             representing,
@@ -236,7 +236,7 @@ exports.createScore = async (req, res) => {
 
         res.redirect(`/event/${eventId}`);
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Terjadi kesalahan saat membuat penilaian" });
     }
 };
 
@@ -245,20 +245,19 @@ exports.getScores = async (eventId) => {
         const scores = await Score.findAll({ where: { eventId } });
 
         if (!scores.length) {
-            throw new Error('No scores found for this event.');
+            throw new Error('Tidak ada penilaian yang ditemukan');
         }
         
         return scores;
     } catch (error) {
-        throw new Error(error.message);
+        throw new Error("terjadi kesalahan saat mengambil penilaian");
     }
 };
 
 exports.getScoreById = async (req, res) => {
+    const { id, idScore } = req.params;
+    const userId = req.userId;
     try {
-        const { id, idScore } = req.params;
-        const userId = req.userId;
-        
         const score = await Score.findOne({
             where: {
                 id: idScore,
@@ -268,12 +267,12 @@ exports.getScoreById = async (req, res) => {
         });
 
         if (!score) {
-            return res.status(404).json({ message: "Score not found." });
+            return res.status(404).json({ message: "penilaian tidak ditemukan" });
         }
         
-        return score; // Return the score directly, as this is used in the route to render a view
+        return score; 
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: `Terjadi kesalahan saat mengambil penilaian dengan id=${idScore}` });
     }
 };
 
@@ -289,10 +288,10 @@ exports.deleteScore = async (req, res) => {
         if (num == 1) {
             res.redirect(`/event/${eventId}`); 
         } else {
-            res.status(404).send({ message: `Cannot delete Score with id=${id}. Score not found!` });
+            res.status(404).send({ message: `Tidak dapat menghapus penilaian dengan id=${id}. Penilaian mungkin tidak ditemukan!` });
         }
     } catch (err) {
-        res.status(500).send({ message: `Could not delete Score with id=${id}.`, error: err });
+        res.status(500).send({ message: `Tidak dapat menghapus penilaian dengan id=${id}.`});
     }
 };
 
@@ -512,10 +511,10 @@ exports.updateScore = async (req, res) => {
         if (num == 1) {
             res.redirect(`/event/${id}`);
         } else {
-            res.send({ message: `Cannot update Score with id=${idScore}. Maybe Score was not found or req.body is empty!` });
+            res.send({ message: `Tidak dapat merubah penilaian dengan id=${idScore}. Mungkin Skor tidak ditemukan atau req.body kosong!` });
         }
     } catch (err) {
-        res.status(500).send({ message: `Error updating Score with id=${idScore}` });
+        res.status(500).send({ message: `Terjadi kesalahan saat merubah penilaian dengan id=${idScore}` });
     }
 };
 
@@ -533,11 +532,11 @@ exports.searchScores = async (req, res) => {
         });
 
         if (scores.length === 0) {
-            return res.status(404).json({ message: "Scores not found." });
+            return res.status(404).json({ message: "Penilaian tidak ditemukan." });
         } else {
             res.status(200).json(scores);
         }
     } catch (error) {
-        res.status(500).send({ message: `Error retrieving Scores with ${field}=${value}` });
+        res.status(500).send({ message: `Terjadi kesalahan saat mencari penilaian ${field}=${value}` });
     }
 };

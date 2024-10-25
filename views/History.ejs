@@ -26,17 +26,19 @@
         </thead>
         <tbody>
             <% scores.forEach((score, index) => { %>
-                <tr>
-                    <td><%= index + 1 %></td>
-                    <% events.forEach((event, index) => { %>
-                        <% if (event.id == score.eventId) { %>
-                            <td><%= event.title %></td> 
-                        <% } %>
-                    <% }); %>
-                    <td><%= score.eventName %></td> 
-                    <td><%= score.representing %></td>
-                    <td><%= new Date(score.createdAt).toLocaleDateString() %></td> 
-                </tr>
+                <% if (score.userId === userId) { %>
+                    <tr>
+                        <td><%= index + 1 %></td>
+                        <% events.forEach((event, index) => { %>
+                            <% if (event.id == score.eventId) { %>
+                                <td>
+                                    <a href="/event/<%= score.eventId %>"><%= event.title %></a></td> 
+                            <% } %>
+                        <% }); %>
+                        <td><%= score.representing %></td>
+                        <td><%= new Date(score.createdAt).toLocaleDateString() %></td> 
+                    </tr>
+                <% } %>
             <% }); %>
         </tbody>
       </table>
