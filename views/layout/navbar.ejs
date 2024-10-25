@@ -60,7 +60,7 @@
     </button>
     
     <div class="collapse navbar-collapse justify-content-end mt-2" id="navbarNav">
-      <% if (userRole === "admin" || userRole === "admin event") { %>
+      <% if (userRole === "admin") { %>
         <div class="nav-item mt-2">
           <% if (currentPath !== "/admin/dashboard") { %>
             <form action="/admin/dashboard" method="GET" class="d-inline">
@@ -93,8 +93,13 @@
           <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/event" role="button">Event</a>
         </li>
         <li class="nav-item">
-          <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="#" role="button">page +</a>
+          <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/list-kopi" role="button">page +</a>
         </li>
+        <% if (userRole === "jury") { %>
+          <li class="nav-item">
+            <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/history-jury" role="button">History</a>
+          </li> 
+        <% } %>
       </ul>
 
       <div class="nav-item mt-2 ms-lg-4">
