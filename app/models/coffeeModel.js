@@ -1,30 +1,44 @@
 module.exports = (sequelize, Sequelize) => {
-    const coffee = sequelize.define("coffee_sample", {
-        id: {
-            type: Sequelize.INTEGER,
-            autoIncrement: true,
-            primaryKey: true,
-        },
-        coffee_name: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        coffee_img: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        coffee_origin: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        coffee_type: {
-            type: Sequelize.STRING,
-            allowNull: false
-        },
-        flavor_notes: {
-            type: Sequelize.TEXT,
-            allowNull : false
-        }
+    const Coffee = sequelize.define("coffee_flavours", {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+      },
+      coffee_beans: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      origin: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      flavours: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      acidity: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      body: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      aftertaste: {
+        type: Sequelize.TEXT,
+        allowNull: false,
+      },
+      sweetness: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
+      img: {
+        type: Sequelize.STRING,
+        allowNull: false,
+      },
     });
-    return coffee;
+  
+    return Coffee;
   };
+  

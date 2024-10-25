@@ -80,6 +80,10 @@ exports.updateEvent = async (req, res) => {
     const event = await Event.findByPk(id);
     const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
 
+    if(!event){
+        return res.status(404).json({ message: "Event tidak ditemukan." });
+    }
+
     let updateFields = {};
     if (image) updateFields.image = image;
     if (title) updateFields.title = title;

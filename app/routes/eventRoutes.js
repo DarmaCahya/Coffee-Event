@@ -34,7 +34,7 @@ module.exports = function(app) {
             const events = await controller.getEvent();
             res.render('Event/event', { userId, events, userRole, currentPath: req.path});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });    
 
@@ -70,7 +70,7 @@ module.exports = function(app) {
     
             res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path });
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });        
     
@@ -80,7 +80,7 @@ module.exports = function(app) {
             const events = await controller.searchEvent(req, res);
             res.render('Event/event', { events, userRole, currentPath: req.path});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
 

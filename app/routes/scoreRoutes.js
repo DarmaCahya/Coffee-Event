@@ -31,17 +31,17 @@ module.exports = function(app) {
             // Check if the event exists
             const event = await Event.findByPk(id);
             if (!event) {
-                return res.status(404).send({ message: 'Event not found' });
+                return res.status(404).send({ message: 'Event tidak ditemukan' });
             }
     
             // Verify the PIN
             if (event.pin !== pin) {
-                return res.status(401).send({ message: 'Invalid PIN' });
+                return res.status(401).send({ message: 'PIN tidak valid' });
             }
     
             res.redirect(`/event/score/${id}/form`);
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
     app.get("/event/score/:id/form", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
@@ -52,12 +52,12 @@ module.exports = function(app) {
             const id = req.params.id;
             const event = await Event.findByPk(id);
             if (!event) {
-                return res.status(404).send({ message: 'Event not found' });
+                return res.status(404).send({ message: 'Event tidak ditemukan' });
             }
     
             res.render('Scores/form', {id, user, userRole, userId});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
 
@@ -67,13 +67,13 @@ module.exports = function(app) {
             const idScore = req.params.idScore;
             const event = await Event.findByPk(id);
             if (!event) {
-                return res.status(404).send({ message: 'Event not found' });
+                return res.status(404).send({ message: 'Event tidak ditemukan' });
             }
 
             const score = await controller.getScoreById(req, res);
             res.render("Scores/updateForm", { event, score, id });
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });    
 };

@@ -12,14 +12,16 @@ module.exports = function(app) {
       next();
     });
     app.post("/api/coffee/create", authJwt.verifyToken, authJwt.isAdmin, controller.createCoffee);
+    app.delete("/api/coffee/:id", authJwt.verifyToken,  authJwt.isAdmin, controller.deleteCoffee);
+    app.put("/api/coffee/:id", authJwt.verifyToken, authJwt.isAdmin, controller.updateCoffee);
 
     app.get("/list-kopi", authJwt.verifyToken, async (req, res) => {
         try{
           const userRole = req.user ? req.user.role : "guest";
           const coffees = await controller.getCoffee();
-          res.render("Coffee/coffee-list", {userRole, coffees, currentPath: req.path});
+          res.render("Coffee/coffeeList", {userRole, coffees, currentPath: req.path});
         } catch (error) {
-          res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
 
@@ -30,7 +32,7 @@ module.exports = function(app) {
           const coffee = await controller.getCoffeeById(coffeeId);
           res.render("Coffee/coffee-list", {userRole, coffee, currentPath: req.path});
         } catch (error) {
-          res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
 
