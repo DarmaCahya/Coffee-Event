@@ -36,8 +36,8 @@ module.exports = function(app) {
         } catch (error) {
             res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
-    });    
-
+    });      
+    
     app.get("/event/:id", authJwt.verifyToken, async (req, res) => {
         try {
             const userRole = req.user ? req.user.role : "guest";
@@ -45,34 +45,28 @@ module.exports = function(app) {
             const id = req.params.id;
             
             const event = await controller.getEventById(id);
+
             
             const scores = await Score.findAll({
-                where: {
-                    eventId: id
-                }, 
-                include: [{
-                    model: User,
-                    attributes: ['username']                
-                }]
+                where: { eventId: id },
+                include: [{ model: User, attributes: ['username'] }]
             });
-            console.log(scores);
-
-            let score = null;
     
+            let score = null;
             if (userRole !== "guest") {
                 score = await Score.findOne({
-                    where: {
-                        eventId: id,
-                        userId: user.id
-                    }
+                    where: { eventId: id, userId: user.id }
                 });
             }
     
-            res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path });
-        } catch (error) {
-            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
+            const error = req.flash('error'); // Ambil pesan error dari flash
+            res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path, error });
+        } catch (error) {   
+            res.status(500).render("error", { message: error.message });
+           
         }
-    });        
+    });
+    
     
     app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {

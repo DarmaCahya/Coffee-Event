@@ -52,7 +52,7 @@ exports.getEventById = async (eventId) => {
 
         return event;
     } catch (error) {
-        throw new Error({message: "Terjadi kesalahan saat mengambil event."}); 
+        throw new Error("Terjadi kesalahan saat mengambil event."); 
     }
 };
 

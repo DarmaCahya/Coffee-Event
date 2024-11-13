@@ -20,7 +20,7 @@ module.exports = function(app) {
         const userRole = req.user ? req.user.role : "guest";
         res.render('Event/event', { events, userRole, currentPath: req.path });
     }catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(500).render("error", { message: error.message });
     }
   })
 
@@ -29,7 +29,7 @@ module.exports = function(app) {
           const adminEvents = await User.findAll({ where: { role: 'admin event' } });
           res.render('Admin/createEvent', {adminEvents});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+          res.status(500).render("error", { message: error.message });
         }
     });
 

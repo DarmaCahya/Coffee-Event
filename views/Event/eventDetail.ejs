@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
         rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body {
             min-height: 100%;
@@ -40,6 +41,19 @@
 
 <body>
     <%- include('../layout/navbar') %>
+
+    <!-- Toast Notification -->
+   
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <%= error.length > 0 ? error[0] : '' %>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
 
     <a href="/event/" class="btn btn-secondary ms-5 mt-5" style="width: 15vh;">
         <i class="bi bi-arrow-left"></i> Back
@@ -144,29 +158,30 @@
 
     <%- include('../layout/footer') %>
     
-        <!-- PIN Modal -->
-        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="/event/score/<%= event.id %>/verify" method="POST">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="pin" class="form-label">PIN</label>
-                                <input type="password" class="form-control" id="pin" name="pin" required>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
-                        </div>
-                    </form>
+    <!-- PIN Modal -->
+    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <form action="/event/score/<%= event.id %>/verify" method="POST" autocomplete="off">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="eventPin" class="form-label">PIN</label>
+                            <input type="text" class="form-control" id="eventPin" name="eventPin" required autocomplete="off">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
             </div>
         </div>
+    </div>
+
 
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
           <div class="modal-dialog">
@@ -189,6 +204,26 @@
           </div>
         </div>  
         <script>
+            const pinInput = document.getElementById("eventPin");
+            let pinValue = "";
+
+            pinInput.addEventListener("input", function(event) {
+                // Ambil nilai yang baru saja dimasukkan
+                const newValue = event.target.value;
+                // Update pinValue untuk menampung karakter yang sebenarnya
+                pinValue += newValue.slice(pinValue.length);
+                
+                // Set tampilan input menjadi asterisks
+                event.target.value = "*".repeat(pinValue.length);
+            });
+
+            pinInput.addEventListener("keydown", function(event) {
+                // Menghapus karakter jika tombol Backspace ditekan
+                if (event.key === "Backspace") {
+                    pinValue = pinValue.slice(0, -1);
+                }
+            });
+
             var deleteModal = document.getElementById('deleteModal');
             deleteModal.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget; 
@@ -198,7 +233,30 @@
             deleteForm.action = '/api/event/delete/' + eventId + '?_method=DELETE'; 
             });
         </script>
+
+        <!-- Show toast if there is an error -->
+   
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <!-- Show SweetAlert if there is an error -->
+        <script>
+            window.addEventListener("load", function() { // Menggunakan event load di tingkat window
+                const error = "<%= error.length > 0 ? error[0] : '' %>";
+                if (error) {
+                    setTimeout(function() {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: error,
+                            confirmButtonColor: '#d33', // Warna tombol konfirmasi
+                            background: '#fff', // Warna background alert
+                            color: '#721c24', // Warna teks
+                            confirmButtonText: 'OK'
+                        });
+                    }, 0);
+                }
+            });
+        </script>
 </body>
 
 </html>

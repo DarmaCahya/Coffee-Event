@@ -26,24 +26,29 @@ module.exports = function(app) {
     app.post('/event/score/:id/verify', [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
         try {
             const id = req.params.id;
-            const { pin } = req.body;
-    
+            const { eventPin } = req.body;
+
             // Check if the event exists
             const event = await Event.findByPk(id);
             if (!event) {
-                return res.status(404).send({ message: 'Event tidak ditemukan' });
+                req.flash('error', 'Event Tidak Ditemukan');
+                return res.redirect(`/event/${id}`);
             }
     
             // Verify the PIN
-            if (event.pin !== pin) {
-                return res.status(401).send({ message: 'PIN tidak valid' });
+            if (event.pin !== eventPin) {
+                req.flash('error', 'Pin Tidak Valid');
+                return res.redirect(`/event/${id}`);
             }
     
             res.redirect(`/event/score/${id}/form`);
         } catch (error) {
-            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
+            req.flash('error', error.message);
+            res.redirect(`/event/${id}`);
         }
     });
+    
+    
     app.get("/event/score/:id/form", [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
         try {
             const userId = req.user.id;

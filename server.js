@@ -5,6 +5,9 @@ const path = require('path');
 const bcrypt = require("bcryptjs");
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
+
 
 require('dotenv').config();
 
@@ -25,6 +28,13 @@ app.use(
     httpOnly: true,
   })
 );
+
+app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(flash());
 
 require('./app/routes/authRoutes')(app);
 require('./app/routes/userRoutes')(app);
@@ -108,9 +118,9 @@ async function initial() {
   });
 
   await db.user.create({
-    username: "hehojury",
-    email: "john12@gmail.com",
-    password: bcrypt.hashSync("securepassword"),
+    username: "jury1",
+    email: "juri1@gmail.com",
+    password: bcrypt.hashSync("asd"),
     role: "jury",
     is_active: 1
   });

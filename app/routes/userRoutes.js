@@ -20,7 +20,7 @@ module.exports = function(app) {
       const events = await eventController.getEvent();
       res.render("home", {userRole,events, currentPath: req.path});
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).render("error", { message: error.message }); 
     }
   });
 
@@ -44,7 +44,7 @@ module.exports = function(app) {
       const userRole = req.user ? req.user.role : "guest";
       res.render("History", {userRole, userId, scores, events});
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).render("error", { message: error.message }); 
     }
   });
 
