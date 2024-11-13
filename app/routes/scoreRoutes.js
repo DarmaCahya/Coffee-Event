@@ -24,8 +24,8 @@ module.exports = function(app) {
 
     //handle pin verify
     app.post('/event/score/:id/verify', [authJwt.verifyToken, authJwt.isAdminOrJury], async (req, res) => {
+        const id = req.params.id;
         try {
-            const id = req.params.id;
             const { eventPin } = req.body;
 
             // Check if the event exists
@@ -34,6 +34,7 @@ module.exports = function(app) {
                 req.flash('error', 'Event Tidak Ditemukan');
                 return res.redirect(`/event/${id}`);
             }
+            
     
             // Verify the PIN
             if (event.pin !== eventPin) {

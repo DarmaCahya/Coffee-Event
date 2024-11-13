@@ -6,8 +6,7 @@
     <title>Event Detail</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <style>
         body {
@@ -36,6 +35,10 @@
         .modal-body input {
             margin-bottom: 10px;
         }
+
+        .font-jakarta-sans-extra-bold {
+            font-weight: 800;
+        }
     </style>
 </head>
 
@@ -55,11 +58,11 @@
         </div>
     </div>
 
-    <a href="/event/" class="btn btn-secondary ms-5 mt-5" style="width: 15vh;">
-        <i class="bi bi-arrow-left"></i> Back
-    </a>
-    
+
     <div class="container mt-4">
+        <a href="/event/" class="btn btn-secondary mb-4" style="width: 15vh;">
+            <i class="bi bi-arrow-left"></i> Back
+        </a>
         <% if (userRole === "admin" || userRole === "admin event") { %>
             <div class="d-flex mb-3 d-md-flex justify-content-md-end">
                 <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>
@@ -159,28 +162,30 @@
     <%- include('../layout/footer') %>
     
     <!-- PIN Modal -->
-    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form action="/event/score/<%= event.id %>/verify" method="POST" autocomplete="off">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label for="eventPin" class="form-label">PIN</label>
-                            <input type="text" class="form-control" id="eventPin" name="eventPin" required autocomplete="off">
+        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="/event/score/<%= event.id %>/verify" method="POST" autocomplete="off">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="eventPin" class="form-label">PIN</label>
+                                <input type="text" class="form-control" id="eventPin" required autocomplete="off">
+                                <!-- Hidden input to store the actual PIN -->
+                                <input type="hidden" name="eventPin" id="actualPin">
+                            </div>
                         </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
-                </form>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
 
 
         <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
@@ -205,22 +210,27 @@
         </div>  
         <script>
             const pinInput = document.getElementById("eventPin");
+            const actualPinInput = document.getElementById("actualPin");
             let pinValue = "";
 
             pinInput.addEventListener("input", function(event) {
-                // Ambil nilai yang baru saja dimasukkan
+                // Get the newly entered value
                 const newValue = event.target.value;
-                // Update pinValue untuk menampung karakter yang sebenarnya
+                // Update pinValue to store the actual PIN
                 pinValue += newValue.slice(pinValue.length);
                 
-                // Set tampilan input menjadi asterisks
+                // Set the display to asterisks
                 event.target.value = "*".repeat(pinValue.length);
+
+                // Update hidden input with the actual PIN
+                actualPinInput.value = pinValue;
             });
 
             pinInput.addEventListener("keydown", function(event) {
-                // Menghapus karakter jika tombol Backspace ditekan
+                // Handle backspace to remove characters from pinValue
                 if (event.key === "Backspace") {
                     pinValue = pinValue.slice(0, -1);
+                    actualPinInput.value = pinValue;
                 }
             });
 
