@@ -112,6 +112,11 @@ h1{
     text-align: justify;
 }
 
+.btn-primary-green {
+    background-color: #2d6a4f;
+    color: #fff;
+}
+
 @media (min-width: 576px) { /* Small devices (≥576px) */
     #vis {
     transform: scale(0.7);
