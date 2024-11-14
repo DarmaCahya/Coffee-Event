@@ -83,7 +83,7 @@
         <div class="nav-item mt-2">
           <% if (currentPath !== "/admin/dashboard") { %>
             <form action="/admin/dashboard" method="GET" class="d-inline">
-              <button type="submit" class="btn fs-5 btn-primary">Admin Page</button>
+              <button type="submit" class="btn fs-5 btn-primary-green">Admin Page</button>
             </form>
           <% } %>
           <% if (currentPath === "/admin/dashboard") { %>
@@ -112,7 +112,7 @@
           <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/event" role="button">Event</a>
         </li>
         <li class="nav-item">
-          <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/list-kopi" role="button">Coffe Sample</a>
+          <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/coffee-flavours" role="button">Coffee Flavours</a>
         </li>
         <% if (userRole === "jury") { %>
           <li class="nav-item">

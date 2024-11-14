@@ -28,7 +28,7 @@ exports.createCoffee = async (req, res) => {
             img
         });
 
-        res.redirect('/list-kopi');
+        res.redirect('/coffee-flavours');
     } catch (error) {
         res.status(500).json({ message: "Terjadi kesalahan saat membuat Kopi."});
     }
@@ -65,7 +65,7 @@ exports.deleteCoffee = async (req, res) => {
         });
 
         if (num == 1) {
-            return res.redirect("/list-kopi");
+            return res.redirect("/coffee-flavours");
         } else {
             return res.json({ success: false, message: `Tidak dapat menghapus Kopi dengan id=${id}. Mungkin Kopi tidak ditemukan!` });
         }
@@ -106,7 +106,7 @@ exports.updateCoffee = async (req, res) => {
         });
 
         if (num == 1) {
-            res.redirect(`/list-kopi`);
+            res.redirect(`/coffee-flavours`);
         } else {
             res.send({ message: `Tidak dapat merubah kopi dengan id=${id}. Mungkin kopi tidak ditemukan atau req.body kosong.` });
         }

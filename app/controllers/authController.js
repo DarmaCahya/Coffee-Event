@@ -40,7 +40,7 @@ exports.signin = async (req, res) => {
         }
 
         if (user.is_active === 0) {
-            return res.status(403).send({ message: "Akun Anda telah dinonaktifkan." });
+            return res.redirect('/signin?error=AccountDeactivated');
         }
 
         console.log("User found, checking password validity");

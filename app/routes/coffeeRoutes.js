@@ -15,7 +15,7 @@ module.exports = function(app) {
     app.delete("/api/coffee/:id", authJwt.verifyToken,  authJwt.isAdmin, controller.deleteCoffee);
     app.put("/api/coffee/:id", authJwt.verifyToken, authJwt.isAdmin, controller.updateCoffee);
 
-    app.get("/list-kopi", authJwt.verifyToken, async (req, res) => {
+    app.get("/coffee-flavours", authJwt.verifyToken, async (req, res) => {
         try{
           const userRole = req.user ? req.user.role : "guest";
           const coffees = await controller.getCoffee();
@@ -25,7 +25,7 @@ module.exports = function(app) {
         }
     });
 
-    app.get("/list-kopi/:id", authJwt.verifyToken, async (req, res) => {
+    app.get("/coffee-flavours/:id", authJwt.verifyToken, async (req, res) => {
         try{
           const userRole = req.user ? req.user.role : "guest";
           const coffeeId = req.params.id;

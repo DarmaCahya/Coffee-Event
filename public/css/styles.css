@@ -117,6 +117,10 @@ h1{
     color: #fff;
 }
 
+.bg-beige {
+    background-color: #FFFAF3;
+}
+
 @media (min-width: 576px) { /* Small devices (≥576px) */
     #vis {
     transform: scale(0.7);

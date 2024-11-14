@@ -180,7 +180,30 @@ isAdminOrJury = (req, res, next) => {
   
       // Deactivate account
       await User.update({ is_active: 0 }, { where: { id: userId } });
-      return res.status(200).send({ message: "Successfully deactivated account" });
+      return res.status(200).redirect('/admin/users');
+      
+    } catch (error) {
+      return res.status(500).json({ message: error.message });
+    }
+  };
+
+  activateAccount = async (req, res) => {
+    try {
+      const userId = req.params.id;
+      const user = await User.findByPk(userId);
+  
+      if (!user) {
+        return res.status(404).send({ message: "User not found." });
+      }
+  
+      // Prevent deactivating admin accounts
+      if (user.role === "admin") {
+        return res.status(403).send({ message: "Cannot deactivate admin account" });
+      }
+  
+      // Deactivate account
+      await User.update({ is_active: 1 }, { where: { id: userId } });
+      return res.status(200).redirect('/admin/users');
       
     } catch (error) {
       return res.status(500).json({ message: error.message });
@@ -194,7 +217,8 @@ const authJwt = {
     isJury: isJury,
     isAdminOrJury: isAdminOrJury,
     isAdminOrAdminEvent: isAdminOrAdminEvent,
-    deactiveAccount: deactiveAccount
+    deactiveAccount: deactiveAccount,
+    activateAccount: activateAccount
 };
 
 module.exports = authJwt;

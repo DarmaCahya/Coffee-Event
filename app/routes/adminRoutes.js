@@ -83,5 +83,6 @@ module.exports = function(app) {
   }); 
   
   app.put("/admin/deactivate/:id", [authJwt.verifyToken, authJwt.isAdmin, authJwt.deactiveAccount]);
+  app.put("/admin/activate/:id", [authJwt.verifyToken, authJwt.isAdmin, authJwt.activateAccount]);
 
 };

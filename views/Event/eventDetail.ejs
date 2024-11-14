@@ -39,6 +39,23 @@
         .font-jakarta-sans-extra-bold {
             font-weight: 800;
         }
+
+        .btn-primary-green {
+            background-color: #2d6a4f;
+            color: #fff;
+        }
+
+        .btn-primary-green:hover {
+            background-color: #2d6a4f;
+            color: #fff;
+            opacity: 0.7;
+        }
+
+        .btn-primary-green.disabled{
+            background-color: #2d6a4f;
+            color: #fff;
+            /* opacity: 0.8; */
+        }
     </style>
 </head>
 
@@ -65,32 +82,34 @@
         </a>
         <% if (userRole === "admin" || userRole === "admin event") { %>
             <div class="d-flex mb-3 d-md-flex justify-content-md-end">
-                <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>
-                <div class="">
-                    <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
-                    <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
-                    <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
-                    <% } %>
-                </div>
+                <% if (user.id === event.userId) { %>
+                    <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>
+                    <div class="">
+                        <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                        <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+                        <% } %>
+                    </div>
+                <% } %>
             </div>
         <% } %>
 
         <div class="card">
             <img src="<%= event.image || 'https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg'%>" class="card-img-top img-fluid" alt="image" style="max-height: 40rem; object-fit: cover;">
-            <div class="card-body mt-4 m-5 mb-1">
+            <div class="card-body mt-4 m-4 mb-1">
                 <h1 class="card-title mb-4"><%= event.title %></h1>
-                <button type="button" class="btn btn-primary disabled mb-3 "><%= event.tag %></button>
+                <button type="button" class="btn btn-primary-green disabled mb-3"><%= event.tag %></button>
                 <p class="card-text"><%= event.description %></p>
                 <p class="card-text">Waktu Pelaksanaan: <%= event.startDate.toDateString() %> sampai <%= event.endDate.toDateString() %></p>
-                <% if (userRole === "admin" || userRole === "admin event") { %>
+                <% if (userRole === "admin") { %>
                     <p class="card-text">Pin Event : <%= event.pin %></p>
                 <% } %>
+                <% if (userRole === "jury" || userRole === "admin") { %>
+                    <button type="button" class="btn btn-primary-green btn-lg my-4 w-25" data-bs-toggle="modal" data-bs-target="#pinModal">
+                        Form Penilaian
+                    </button>
+                <% } %>
             </div>
-            <% if (userRole === "jury" || userRole === "admin" || userRole === "admin event") { %>
-                <button type="button" class="btn btn-primary btn-lg my-4 mx-5 w-25" data-bs-toggle="modal" data-bs-target="#pinModal">
-                    Form Penilaian
-                </button>
-            <% } %>
         </div>
 
         <div class="winners card mb-5">
@@ -126,7 +145,9 @@
                                     <th scope="col">Name Jury</th>
                                     <th scope="col">Name Participant</th>
                                     <th scope="col">Score</th>
-                                    <th scope="col">Action</th>
+                                    <% if (userRole !== "admin event") { %>
+                                        <th scope="col">Action</th>
+                                    <% } %>
                                 </tr>
                             </thead>
                             <tbody class="table-group-divider">
@@ -136,12 +157,14 @@
                                         <td><%= scoreList.judge %></td>
                                         <td><%= scoreList.representing %></td>
                                         <td><%= scoreList.total_score %></td>
-                                        <td class=" mb-3">
-                                            <button class="btn btn-warning me-4" onclick="location.href='/event/ <%= event.id %>/score/ <%= scoreList.id %>'">Update</button>
-                                            <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display:inline;">
-                                                <button type="submit" class="btn btn-danger">Delete</button>
-                                            </form>                                            
-                                        </td>
+                                        <% if (userRole !== "admin event") { %>
+                                            <td class=" mb-3">
+                                                <button class="btn btn-warning me-4" onclick="location.href='/event/ <%= event.id %>/score/ <%= scoreList.id %>'">Update</button>
+                                                <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display:inline;">
+                                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                                </form>                                            
+                                            </td>
+                                        <% } %>
                                     </tr>
                                 <% }) %>
                             </tbody>
@@ -180,7 +203,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Submit</button>
+                            <button type="submit" class="btn btn-primary-green">Submit</button>
                         </div>
                     </form>
                 </div>

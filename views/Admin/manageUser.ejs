@@ -31,15 +31,15 @@
     <%- include('../layout/navbar') %>
     <div class="m-5">
         <p class="d-inline-flex gap-1">
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#table-jury" role="button" aria-expanded="false" aria-controls="table-user">
+            <a class="btn btn-success" data-bs-toggle="collapse" href="#table-jury" role="button" aria-expanded="false" aria-controls="table-user">
               Tabel Juri
             </a>
-            <a class="btn btn-primary" data-bs-toggle="collapse" href="#table-admin-event" role="button" aria-expanded="false" aria-controls="table-user">
+            <a class="btn btn-success" data-bs-toggle="collapse" href="#table-admin-event" role="button" aria-expanded="false" aria-controls="table-user">
                 Tabel Admin Event
             </a>
         </p>
-        <div class="collapse" id="table-jury">
-            <div class="card">
+        <div class="collapse show" id="table-jury">
+            <div class="card mb-4">
                 <div class="m-3 mb-1">
                     <table class="table table-striped-columns table-hover">
                         <thead>
@@ -48,7 +48,7 @@
                                 <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
-                                <th scope="col">Is_active</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -59,9 +59,9 @@
                                     <td><%= user.username %></td>
                                     <td><%= user.email %></td>
                                     <td><%= user.role %></td>
-                                    <td><%= user.is_active %></td>
+                                    <td><%= user.is_active ? 'Active' : 'Not active' %></td>
                                     <td>
-                                        <button>deactivate</button>
+                                        <button class="btn btn-danger">deactivate</button>
                                     </td>
                                 </tr>
                             <% }) %>
@@ -71,7 +71,7 @@
                 </div>
             </div>
         </div>
-        <div class="collapse" id="table-admin-event">
+        <div class="collapse show" id="table-admin-event">
             <div class="card">
                 <div class="m-3 mb-1">
                     <table class="table table-striped-columns table-hover">
@@ -81,7 +81,7 @@
                                 <th scope="col">Username</th>
                                 <th scope="col">Email</th>
                                 <th scope="col">Role</th>
-                                <th scope="col">Is_active</th>
+                                <th scope="col">Status</th>
                                 <th scope="col">Action</th>
                             </tr>
                         </thead>
@@ -92,14 +92,21 @@
                                     <td><%= user.username %></td>
                                     <td><%= user.email %></td>
                                     <td><%= user.role %></td>
-                                    <td><%= user.is_active %></td>
+                                    <td><%= user.is_active ? 'Active' : 'Not active' %></td>
                                     <td>
+                                        <% if (user.is_active == 1) { %>
                                         <form action="/admin/deactivate/<%= user.id %>?_method=PUT" method="POST" style="display:inline;">
-                                            <button type="submit" class="btn btn-danger">deactivate</button>
+                                                <button type="submit" class="btn btn-danger">deactivate</button>
                                         </form>   
+                                        <% } else { %>
+                                            <form action="/admin/activate/<%= user.id %>?_method=PUT" method="POST" style="display:inline;">
+                                                <button type="submit" class="btn btn-success">activate</button>
+                                        </form>
+                                        <% } %>
                                     </td>
                                 </tr>
                             <% }) %>
+                            
                         </tbody>
                     </table>
                     
