@@ -4,58 +4,42 @@
             <p class="fs-5">Score by jury: <span class="fw-bold fs-5"><%= user.username %></span></p>
         <% } %>
 
-        <% if (userRole === "jury" || userRole === "admin") { %>
-        <div class="d-flex justify-content-end mb-3">
-            <button class="btn btn-warning me-4 " onclick="location.href='/admin/event/<%= event.id %>/score/<%= score.id %>'">Update</button>
-            <form action="/api/score/delete/<%= score.id %>?_method=DELETE" method="POST" style="display:inline;">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </div>
+        <% if (userRole === "jury" || userRole === "admin" || userRole === "admin event") { %>
+        
         <% } %>
         <table class="table table-sm table-striped-columns mb-5">
             <thead class="fs-5">
                 <tr>
-                    <th scope="col">Category</th>
+                    <th scope="col">No</th>
+                    <th scope="col">Nama Peserta</th>
                     <th scope="col">Score</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>Espresso 1 Total</td>
-                    <td><%= score.espresso_total1 %></td>
-                </tr>
-                <tr>
-                    <td>Espresso 2 Total</td>
-                    <td><%= score.espresso_total2 %></td>
-                </tr>
-                <tr>
-                    <td>Espresso Design Total</td>
-                    <td><%= score.espresso_total_dsgn %></td>
-                </tr>
-                <tr>
-                    <td>Milk 1 Total</td>
-                    <td><%= score.milk_total1 %></td>
-                </tr>
-                <tr>
-                    <td>Milk 2 Total</td>
-                    <td><%= score.milk_total2 %></td>
-                </tr>
-                <tr>
-                    <td>Milk Design Total</td>
-                    <td><%= score.milk_total_dsgn %></td>
-                </tr>
-                <tr>
-                    <td>Hygiene Total</td>
-                    <td><%= score.hygiene_total %></td>
-                </tr>
-                <tr>
-                    <td>Performance Total</td>
-                    <td><%= score.performance_total %></td>
-                </tr>
-                <tr class="table-warning">
-                    <td>Total Score</td>
-                    <td><%= score.total_score %></td>
-                </tr>
+                <% if (scores.length > 0) { %>
+                    <% scores.forEach(function(scoreList, index) { %>
+                        <% if (scoreList.userId === user.id) { %>
+                            <tr>
+                                <td><%= index + 1 %></td>
+                                <td><%= scoreList.representing %></td>
+                                <td><%= scoreList.total_score %></td>
+                                <td>
+                                    <div class="d-flex justify-content-end mb-3">
+                                        <button class="btn btn-warning me-4 " onclick="location.href='/event/<%= event.id %>/score/<%= scoreList.id %>'">Update</button>
+                                        <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display:inline;">
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        <% } %>
+                    <% }) %>
+                <% } else { %>
+                    <tr>
+                      <td colspan="6" class="text-center">Anda belum melakukan penilaian.</td>
+                    </tr>
+                <% } %>
             </tbody>
         </table>
     </div>

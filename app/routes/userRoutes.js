@@ -1,5 +1,9 @@
 const { authJwt } = require("../middleware");
 const controller = require("../controllers/userController");
+const eventController = require("../controllers/eventController");
+const db = require("../models");
+const Score = db.score;
+const Event = db.event;
 
 module.exports = function(app) {
   app.use(function(req, res, next) {
@@ -10,14 +14,13 @@ module.exports = function(app) {
     next();
   });
 
-  app.get("/api/test/all", controller.allAccess);
-
-  app.get("/home", authJwt.verifyToken, (req, res) => {
+  app.get("/home", authJwt.verifyToken, async (req, res) => {
     try{
-      const userRole = req.user ? req.user.role : null;
-      res.render("home", {userRole, currentPath: req.path});
+      const userRole = req.user ? req.user.role : "guest";
+      const events = await eventController.getEvent();
+      res.render("home", {userRole,events, currentPath: req.path});
     } catch (error) {
-      res.status(500).send({ message: error.message });
+      res.status(500).render("error", { message: error.message }); 
     }
   });
 
@@ -27,6 +30,22 @@ module.exports = function(app) {
 
   app.get("/notfound", (req, res) => {
     res.render("notFound");
+  });
+
+  app.get("/history-jury",authJwt.verifyToken, async (req, res) => {
+    try{
+      const userId = req.userId;
+      const scores = await Score.findAll({
+        where: {
+          userId: userId
+        }
+      });
+      const events = await Event.findAll();
+      const userRole = req.user ? req.user.role : "guest";
+      res.render("History", {userRole, userId, scores, events});
+    } catch (error) {
+      res.status(500).render("error", { message: error.message }); 
+    }
   });
 
 };

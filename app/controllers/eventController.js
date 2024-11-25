@@ -5,32 +5,32 @@ const Op = db.Sequelize.Op;
 
 exports.createEvent = async (req, res) => {
     try {
-        const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
+        const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin, adminEvent  } = req.body;
         
-        if (!image || !title || !description || !tag || !startDate || !endDate || !pin) {
-            return res.status(400).json({ message: "All fields are required." });
+        if (!image || !title || !description || !tag || !startDate || !endDate || !pin || !adminEvent ) {
+            return res.status(400).json({ message: "Semua field harus terisi!" });
         }
 
         const validTags = ['completed', 'on-going', 'upcoming'];
         if (!validTags.includes(tag)) {
-            return res.status(400).json({ message: "Invalid tag value." });
+            return res.status(400).json({ message: "Nilai Tag tidak valid." });
         }
 
         const existingEvent = await Event.findOne({ where: { title: title } });
         if (existingEvent) {
-            return res.status(400).json({ message: "Event with this title already exists." });
+            return res.status(400).json({ message: "Nama Event ini sudah digunakan." });
         }
 
         if(pin.length !== 4){
-            return res.status(400).json({ message: "PIN must be exactly 4 digits long." });
+            return res.status(400).json({ message: "PIN harus terdiri dari 4 digit." });
         }
 
         const newEvent = await Event.create({
-            image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin
+            image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin, userId: adminEvent 
         });
         res.redirect('/admin/dashboard');
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json({ message: "Terjadi kesalahan saat membuat event." });
     }
 }
 
@@ -39,22 +39,20 @@ exports.getEvent = async () => {
         const events = await Event.findAll();
         return events;
     } catch (error) {
-        throw new Error(error.message); 
+        throw new Error({message: "Terjadi kesalahan saat mengambil semua event."}); 
     }
 };
 
-exports.getEventById = async (req, res) => {
-    const id = req.params.id;
-    const userId = req.userId;
+exports.getEventById = async (eventId) => {
     try {
-        const event = await Event.findByPk(id);
+        const event = await Event.findByPk(eventId);
         if (!event) {
-            throw new Error("Event not found.");
+            throw new Error("Event tidak ditemukan.");
         }
 
         return event;
     } catch (error) {
-        throw error;
+        throw new Error("Terjadi kesalahan saat mengambil event."); 
     }
 };
 
@@ -68,12 +66,12 @@ exports.deleteEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            return res.redirect("/admin/dashboard");
+            return res.redirect("/event");
         } else {
-            return res.json({ success: false, message: `Cannot delete Event with id=${id}. Maybe Event was not found!` });
+            return res.json({ success: false, message: `Tidak dapat menghapus event dengan id=${id}. Mungkin event tidak ditemukan!` });
         }
     } catch (err) {
-        return res.status(500).json({ success: false, message: `Could not delete Event with id=${id}` });
+        return res.status(500).json({ success: false, message: `Tidak dapat menghapus event dengan id=${id}` });
     }
 };
 
@@ -81,6 +79,10 @@ exports.updateEvent = async (req, res) => {
     const id = req.params.id;
     const event = await Event.findByPk(id);
     const { image, title, description, tag, startDate, endDate, winner1, winner2, winner3, pin } = req.body;
+
+    if(!event){
+        return res.status(404).json({ message: "Event tidak ditemukan." });
+    }
 
     let updateFields = {};
     if (image) updateFields.image = image;
@@ -96,18 +98,18 @@ exports.updateEvent = async (req, res) => {
 
     const validTags = ['completed', 'on-going', 'upcoming'];
     if (tag && !validTags.includes(tag)) {
-        return res.status(400).json({ message: "Invalid tag value." });
+        return res.status(400).json({ message: "Nilai tag tidak valid." });
     }
 
     if (title && title !== event.title) {
         const existingEvent = await Event.findOne({ where: { title: title } });
         if (existingEvent) {
-            return res.status(400).json({ message: "Event with this title already exists." });
+            return res.status(400).json({ message: "Nama event ini telah digunakan." });
         }
     }
 
     if(pin && pin.length !== 4){
-        return res.status(400).json({ message: "PIN must be exactly 4 digits long." });
+        return res.status(400).json({ message: "PIN harus terdiri dari 4 digit" });
     }
 
     try {
@@ -116,12 +118,12 @@ exports.updateEvent = async (req, res) => {
         });
 
         if (num == 1) {
-            res.redirect(`/admin/dashboard`);
+            res.redirect(`/event/${id}`);
         } else {
-            res.send({ message: `Cannot update Event with id=${id}. Maybe Event was not found or req.body is empty!` });
+            res.send({ message: `tidak dapat merubah event dengan id=${id}. Mungkin event tidak ditemukan atau req.body kosong.` });
         }
     } catch (err) {
-        res.status(500).send({ message: `Error updating Event with id=${id}` });
+        res.status(500).send({ message: `Terjadi kesalahan saat merubah event dengan id=${id}` });
     }
 };
 
@@ -142,11 +144,11 @@ exports.searchEvent = async (req, res) => {
         }
 
         if (events.length === 0) {
-            return res.status(404).json({ message: "Event not found." });
+            return res.status(404).json({ message: "Event tidak ditemukan." });
         } else {
             res.status(200).json(events);
         }
     } catch (error) {
-        res.status(500).send({ message: 'Error retrieving Event with title=' + title });
+        res.status(500).send({ message: 'Terjadi kesalahan saat mengambil event dengan judul' + title });
     }
 }

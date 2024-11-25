@@ -5,6 +5,9 @@ const path = require('path');
 const bcrypt = require("bcryptjs");
 const bodyParser = require('body-parser');
 const methodOverride = require('method-override');
+const flash = require('connect-flash');
+const session = require('express-session');
+
 
 require('dotenv').config();
 
@@ -26,11 +29,19 @@ app.use(
   })
 );
 
+app.use(session({
+    secret: process.env.JWT_SECRET,
+    resave: false,
+    saveUninitialized: true
+}));
+app.use(flash());
+
 require('./app/routes/authRoutes')(app);
 require('./app/routes/userRoutes')(app);
 require('./app/routes/eventRoutes')(app);
 require('./app/routes/scoreRoutes')(app);
 require('./app/routes/adminRoutes')(app);
+require('./app/routes/coffeeRoutes')(app);
 
 const db = require("./app/models");
 db.sequelize.sync({force: true}).then(() => {
@@ -40,7 +51,7 @@ db.sequelize.sync({force: true}).then(() => {
 
 // Define a simple route
 app.get('/', (req, res) => {
-  res.status(404).send({message: "welcome coffee competition"});
+  res.redirect('/home');
 });
 
 app.use((req, res, next) => {
@@ -102,17 +113,36 @@ async function initial() {
     username: "john_doe",
     email: "john@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "admin"
+    role: "admin",
+    is_active: 1
+  });
+
+  await db.user.create({
+    username: "jury1",
+    email: "juri1@gmail.com",
+    password: bcrypt.hashSync("asd"),
+    role: "jury",
+    is_active: 1
+  });
+
+  await db.user.create({
+    username: "heho12",
+    email: "event1@gmail.com",
+    password: bcrypt.hashSync("securepassword"),
+    role: "admin event",
+    is_active: 1
   });
 
   await db.user.create({
     username: "heho",
-    email: "john12@gmail.com",
+    email: "event12@gmail.com",
     password: bcrypt.hashSync("securepassword"),
-    role: "jury"
+    role: "admin event",
+    is_active: 1
   });
 
   await db.event.create({
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship",
     description: "A championship to find the best coffee brewer.",
@@ -123,6 +153,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 3,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship2",
     description: "A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.v A championship to find the best coffee brewer. A championship to find the best coffee brewer. A championship to find the best coffee brewer.",
@@ -133,6 +164,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship3",
     description: "A championship to find the best coffee brewer.",
@@ -143,6 +175,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 3,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship4",
     description: "A championship to find the best coffee brewer.",
@@ -153,6 +186,7 @@ async function initial() {
   });
 
   await db.event.create({
+    userId: 4,
     image: "https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg",
     title: "Coffee Brewing Championship5",
     description: "A championship to find the best coffee brewer.",

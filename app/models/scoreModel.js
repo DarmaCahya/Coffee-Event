@@ -176,6 +176,18 @@ module.exports = (sequelize, Sequelize) => {
             type: Sequelize.BOOLEAN,
             allowNull: false,
         },
+        milk_pitcher_waste_end1: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        },
+        milk_pitcher_waste_end2: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        },
+        milk_pitcher_waste_end_dsgn: {
+            type: Sequelize.BOOLEAN,
+            allowNull: false,
+        },        
         milk_total1: {
             type: Sequelize.INTEGER,
         },

@@ -1,21 +1,18 @@
 const config = require("../config/dbConfig.js");
 
 const Sequelize = require("sequelize");
-const sequelize = new Sequelize(
-  config.DB,
-  config.USER,
-  config.PASSWORD,
-  {
-    host: config.HOST,
-    dialect: config.dialect,
-    pool: {
-      max: config.pool.max,
-      min: config.pool.min,
-      acquire: config.pool.acquire,
-      idle: config.pool.idle
-    }
-  }
-);
+const sequelize = new Sequelize(config.DB, config.USER, config.PASSWORD, {
+  host: config.HOST,
+  dialect: config.dialect,
+  port: 3307,
+  // port: 3306,
+  pool: {
+    max: config.pool.max,
+    min: config.pool.min,
+    acquire: config.pool.acquire,
+    idle: config.pool.idle,
+  },
+});
 
 const db = {};
 
@@ -25,13 +22,15 @@ db.sequelize = sequelize;
 db.user = require("../models/userModel.js")(sequelize, Sequelize);
 db.event = require("../models/eventModel.js")(sequelize, Sequelize);
 db.score = require("../models/scoreModel.js")(sequelize, Sequelize);
+db.coffee = require("../models/coffeeModel.js")(sequelize, Sequelize);
 
-db.event.hasMany(db.score, { foreignKey: 'eventId', onDelete: 'CASCADE' });
-db.score.belongsTo(db.event, { foreignKey: 'eventId', onDelete: 'CASCADE' });
+db.event.hasMany(db.score, { foreignKey: "eventId", onDelete: "CASCADE" });
+db.score.belongsTo(db.event, { foreignKey: "eventId", onDelete: "CASCADE" });
 
-db.user.hasMany(db.score, { foreignKey: 'userId', onDelete: 'CASCADE' });
-db.score.belongsTo(db.user, { foreignKey: 'userId', onDelete: 'CASCADE' });
+db.user.hasMany(db.score, { foreignKey: "userId", onDelete: "CASCADE" });
+db.score.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE" });
 
-db.ROLES = ["jury", "admin"];
+db.user.hasMany(db.event, { foreignKey: "userId", onDelete: "CASCADE" });
+db.event.belongsTo(db.user, { foreignKey: "userId", onDelete: "CASCADE" });
 
 module.exports = db;

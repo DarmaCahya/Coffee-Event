@@ -25,13 +25,14 @@
             text-align: center;
         }
     </style>
+    <link rel="stylesheet" href="/css/styles.css" />
 </head>
 <body>
     <%- include('../layout/navbar') %>
 
     <div class="content">
         <!-- Konten utama di sini -->
-        <h1 class="text-center m-5 fw-bold text-secondary">Event KompetisiKopi</h1>
+        <h1 class="text-center m-5 text-green-primary font-jakarta-sans font-jakarta-sans-extra-bold">Event brewfest.id</h1>
 
         <div class="d-flex justify-content-center mb-4">
             <form action="/event/search" method="POST" class="d-flex me-3" role="search">
@@ -52,10 +53,10 @@
         </div>
     
         <div class="d-flex justify-content-center mb-4">
-            <button id="allBtn" class="btn btn-primary me-2 btn-change" onclick="filterEvents('all', this)">Semua</button>
-            <button id="completedBtn" class="btn btn-primary me-2 btn-change" onclick="filterEvents('completed', this)">Completed</button>
-            <button id="ongoingBtn" class="btn btn-primary me-2 btn-change" onclick="filterEvents('on-going', this)">On-going</button>
-            <button id="upcomingBtn" class="btn btn-primary btn-change" onclick="filterEvents('upcoming', this)">Upcoming</button>
+            <button id="allBtn" class="btn btn-primary-green me-2 btn-change" onclick="filterEvents('all', this)">Semua</button>
+            <button id="completedBtn" class="btn btn-primary-green me-2 btn-change" onclick="filterEvents('completed', this)">Completed</button>
+            <button id="ongoingBtn" class="btn btn-primary-green me-2 btn-change" onclick="filterEvents('on-going', this)">On-going</button>
+            <button id="upcomingBtn" class="btn btn-primary-green btn-change" onclick="filterEvents('upcoming', this)">Upcoming</button>
         </div>    
     
         <div class="container my-5">
@@ -66,10 +67,10 @@
                 <% if (events && events.length > 0) { %>
                     <% events.forEach((event) => { %>
                         <div class="col-md-4 mb-5" data-tag="<%= event.tag %>">
-                            <div class="card" style="height: 30rem;">
+                            <div class="card" style="height: 33rem;">
                                 <a href="/event/<%= event.id %>" class="card-link" style="text-decoration: none; color: black;">
                                     <div>
-                                        <img src="<%= event.image %>" class="card-img-top " alt="Event Image" style="max-height: 20rem; object-fit: cover;">
+                                        <img src="https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg" class="card-img-top " alt="Event Image" style="max-height: 20rem; object-fit: cover;" onerror="this.onerror=null; this.src='https://i.ibb.co/rFTHdxG/coffee-cup.jpg';">
                                         <div class="card-body">
                                             <h5 class="card-title fs-4"><%= event.title %></h5>
                                             <p class="card-text fs-5 text-truncate"><%= event.description %></p>
@@ -77,17 +78,21 @@
                                         </div>
                                     </div>
                                 </a>
-                                <% if (userRole === "admin" && currentPath === "/admin/dashboard") { %>
+                                <% if ((userRole === "admin" && currentPath === "/admin/dashboard") || (userRole === "admin event" && event.userId === userId) ) { %>
                                     <div class="d-flex justify-content-center mb-3">
                                         <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+                                        <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
                                         <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+                                        <% } %>
                                     </div>
                                 <% } %>
                             </div>
                         </div>
                     <% }) %>
                 <% } else { %>
-                    <!-- No events found message or empty state -->
+                    <div>
+                        <p>Belum ada event nih</p>
+                    </div>
                 <% } %>
             </div>
         </div>
@@ -114,11 +119,7 @@
         </div>    
     </div>
 
-    <footer class="bg-light text-center text-lg-start mt-auto">
-        <div class="text-center p-3">
-            © 2024 KompetisiKopi. All Rights Reserved
-        </div>
-    </footer>
+    <%- include('../layout/footer') %>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
@@ -157,9 +158,9 @@
             var buttons = document.querySelectorAll('.btn-change');
             buttons.forEach(function(btn) {
                 btn.classList.remove('btn-secondary');
-                btn.classList.add('btn-primary');
+                btn.classList.add('btn-primary-green');
             });
-            button.classList.remove('btn-primary');
+            button.classList.remove('btn-primary-green');
             button.classList.add('btn-secondary');
         }
 

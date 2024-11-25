@@ -12,7 +12,7 @@
           <div class="row justify-content-center">
             <div class="col-12 col-sm-10 col-md-8 col-lg-6 col-xl-5 col-xxl-4">
               <div class="d-flex align-items-center mb-4">
-                <a href="http://localhost:8080/admin/dashboard" class="btn btn-secondary">
+                <a href="history:back" class="btn btn-secondary">
                   <i class="bi bi-arrow-left"></i> Back
                 </a>
               </div>
@@ -86,6 +86,17 @@
                         </div>
                       </div>
                       <div class="col-12">
+                        <div class="form-floating mb-3">
+                          <select class="form-select" id="adminEvent" name="adminEvent" required>
+                              <option value="" disabled selected>Select Admin Event</option>
+                              <% adminEvents.forEach(function(adminEvent) { %>
+                                  <option value="<%= adminEvent.id %>"><%= adminEvent.username %></option>
+                              <% }) %>
+                          </select>                        
+                          <label for="adminEvent" class="form-label">Admin Event</label>
+                        </div>
+                      </div>  
+                      <div class="col-12">
                         <div class="d-grid my-3">
                           <button class="btn btn-primary btn-lg" type="submit">Create Event</button>
                         </div>
@@ -98,5 +109,7 @@
           </div>
         </div>
     </section>
+    <%- include('../layout/footer') %>
+
 </body>
 </html>

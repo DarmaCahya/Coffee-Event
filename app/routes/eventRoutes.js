@@ -24,56 +24,57 @@ module.exports = function(app) {
     app.post("/api/event/search", controller.searchEvent);
     app.get("/api/event", controller.getEvent);
     app.get("/api/event/:id", controller.getEventById);
-    app.delete("/api/event/delete/:id", [authJwt.verifyToken, authJwt.isAdmin], controller.deleteEvent);
-    app.put('/api/event/update/:id', [authJwt.verifyToken, authJwt.isAdmin], controller.updateEvent);
+    app.delete("/api/event/delete/:id", [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], controller.deleteEvent);
+    app.put('/api/event/update/:id', [authJwt.verifyToken, authJwt.isAdminOrAdminEvent], controller.updateEvent);
 
     app.get("/event", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userId = req.userId
+            const userRole = req.user ? req.user.role : "guest";
             const events = await controller.getEvent();
-            res.render('Event/event', { events, userRole, currentPath: req.path});
+            res.render('Event/event', { userId, events, userRole, currentPath: req.path});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
-    });    
-
+    });      
+    
     app.get("/event/:id", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userRole = req.user ? req.user.role : "guest";
             const user = req.user;
             const id = req.params.id;
             
-            const event = await controller.getEventById(req, res);
+            const event = await controller.getEventById(id);
+
             
             const scores = await Score.findAll({
-                where: {
-                    eventId: id
-                }, include: [{
-                    model: User,
-                    attributes: ['username']                
-                }]
+                where: { eventId: id },
+                include: [{ model: User, attributes: ['username'] }]
             });
-            
-            const score = await Score.findOne({
-                where: {
-                    eventId: id,
-                    userId: user.id
-                }
-            });
-            
-            res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path });
-        } catch (error) {
-            res.status(500).send({ message: error.message });
+    
+            let score = null;
+            if (userRole !== "guest") {
+                score = await Score.findOne({
+                    where: { eventId: id, userId: user.id }
+                });
+            }
+    
+            const error = req.flash('error'); // Ambil pesan error dari flash
+            res.render('Event/eventDetail', { scores, user, event, id, userRole, score, currentPath: req.path, error });
+        } catch (error) {   
+            res.status(500).render("error", { message: error.message });
+           
         }
-    });    
+    });
+    
     
     app.post("/event/search", authJwt.verifyToken, async (req, res) => {
         try {
-            const userRole = req.user ? req.user.role : null;
+            const userRole = req.user ? req.user.role : "guest";
             const events = await controller.searchEvent(req, res);
             res.render('Event/event', { events, userRole, currentPath: req.path});
         } catch (error) {
-            res.status(500).send({ message: error.message });
+            res.status(500).send({ message: "Terjadi kesalahan saat akan mengakses url ini"});
         }
     });
 
