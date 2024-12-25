@@ -32,79 +32,76 @@
   }
 
   .bg-beige {
-      background-color: #FFFAF3;
+    background-color: #fffaf3;
   }
 
   .navbar-nav .nav-item .active {
     border: 2px solid #28a745; /* Change this to your desired border color */
     border-radius: 5px; /* Optional: Adds a slight rounding to the corners */
     background-color: rgba(40, 167, 69, 0.1); /* Optional: Adds a background color for better visibility */
-  } 
+  }
 
-  a:hover{
+  a:hover {
     color: blue;
     text-decoration: underline;
   }
 
-    /* Ukuran layar besar (desktop) */
+  /* Ukuran layar besar (desktop) */
   .logo {
-      width: 11rem; /* Set ukuran default untuk desktop */
+    width: 11rem; /* Set ukuran default untuk desktop */
   }
 
   /* Ukuran layar sedang (tablet) */
   @media (max-width: 768px) {
-      .logo {
-          width: 11rem; /* Ukuran logo lebih kecil untuk tablet */
-      }
+    .logo {
+      width: 11rem; /* Ukuran logo lebih kecil untuk tablet */
+    }
   }
 
   /* Ukuran layar kecil (ponsel) */
   @media (max-width: 480px) {
-      .logo {
-          width: 10rem; /* Ukuran logo lebih kecil untuk ponsel */
-      }
+    .logo {
+      width: 10rem; /* Ukuran logo lebih kecil untuk ponsel */
+    }
   }
 </style>
 
 <nav class="navbar navbar-expand-lg bg-beige p-4 position-relative z-3">
-  <div class="container align-items-center ">
+  <div class="container align-items-center">
     <!-- Navbar Brand with Icon -->
     <a class="navbar-brand text-green-primary font-jakarta-sans-extra-bold" href="/home">
       <!-- <i class="bi bi-cup" style="font-size: 2rem;"></i> Coffee cup icon -->
       <img class="logo" src="/images/logo-simple.svg" />
     </a>
-    
+
     <button class="navbar-toggler mt-3 pt-md-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    
+
     <div class="collapse navbar-collapse justify-content-end mt-2" id="navbarNav">
       <% if (userRole === "admin") { %>
-        <div class="nav-item mt-2">
-          <% if (currentPath !== "/admin/dashboard") { %>
-            <form action="/admin/dashboard" method="GET" class="d-inline">
-              <button type="submit" class="btn fs-5 btn-primary-green">Admin Page</button>
-            </form>
-          <% } %>
-          <% if (currentPath === "/admin/dashboard") { %>
-            <div class="dropdown me-3">
-              <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Action Admin
-              </button>
-              <ul class="dropdown-menu">
-                <li>
-                  <a class="dropdown-item" href="/admin/signup">Create Jury / Admin</a>
-                </li>
-                <li>
-                  <a class="dropdown-item" href="/admin/users">List Users</a>
-                </li>
-              </ul>
-            </div>
-          <% } %>
+      <div class="nav-item mt-2">
+        <% if (currentPath !== "/admin/dashboard") { %>
+        <form action="/admin/dashboard" method="GET" class="d-inline">
+          <button type="submit" class="btn fs-5 btn-primary-green">Admin Page</button>
+        </form>
+        <% } %> <% if (currentPath === "/admin/dashboard") { %>
+        <div class="dropdown me-3">
+          <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Action Admin</button>
+          <ul class="dropdown-menu">
+            <li>
+              <a class="dropdown-item" href="/admin/signup">Create Jury / Admin</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/admin/users">List Users</a>
+            </li>
+          </ul>
         </div>
+        <% } %>
+      </div>
       <% } %>
-      
-      <ul class="navbar-nav mt-2 ">
+
+      <ul class="navbar-nav mt-2">
         <li class="nav-item">
           <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/home" role="button">Home</a>
         </li>
@@ -115,21 +112,21 @@
           <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/coffee-flavours" role="button">Coffee Flavours</a>
         </li>
         <% if (userRole === "jury") { %>
-          <li class="nav-item">
-            <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/history-jury" role="button">History</a>
-          </li> 
+        <li class="nav-item">
+          <a class="btn px-0 fs-5 text-green-primary fw-medium mx-lg-2" href="/history-jury" role="button">History</a>
+        </li>
         <% } %>
       </ul>
 
       <div class="nav-item mt-2 ms-lg-4">
         <% if (userRole === "guest") { %>
-          <form action="/signin" method="GET" class="d-inline">
-            <button type="submit" class="btn btn-outline-secondary fs-5">Login</button>
-          </form>
+        <form action="/signin" method="GET" class="d-inline">
+          <button type="submit" class="btn btn-outline-secondary fs-5">Login</button>
+        </form>
         <% } else { %>
-          <form action="/api/auth/signout" method="POST" class="d-inline">
-            <button type="submit" class="btn btn-outline-secondary fs-5">Logout</button>
-          </form>
+        <form action="/api/auth/signout" method="POST" class="d-inline">
+          <button type="submit" class="btn btn-outline-secondary fs-5">Logout</button>
+        </form>
         <% } %>
       </div>
     </div>
