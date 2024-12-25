@@ -16,31 +16,59 @@
 
       <!-- Tabel List History -->
       <table class="table table-striped table-hover">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama Event</th>
-            <th>Nama Peserta</th>
-            <th>Tanggal Submit</th>
-          </tr>
-        </thead>
-        <tbody>
+        <% if (userRole === "jury") { %>
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Event</th>
+              <th>Nama Peserta</th>
+              <th>Tanggal Submit</th>
+            </tr>
+          </thead>
+          <tbody>
+              <% scoresJury.forEach((score, index) => { %>
+                  <% if (score.userId === juryId) { %>
+                      <tr>
+                          <td><%= index + 1 %></td>
+                          <% eventsJury.forEach((event, index) => { %>
+                              <% if (event.id == score.eventId) { %>
+                                  <td>
+                                      <a href="/event/<%= score.eventId %>"><%= event.title %></a></td> 
+                              <% } %>
+                          <% }); %>
+                          <td><%= score.representing %></td>
+                          <td><%= new Date(score.createdAt).toLocaleDateString() %></td> 
+                      </tr>
+                  <% } %>
+              <% }); %>
+          </tbody>
+        <% } else if (userRole === "admin") { %> 
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nama Event</th>
+              <th>Nama Peserta</th>
+              <th>Nama Juri</th>
+              <th>Tanggal Submit</th>
+            </tr>
+          </thead>
+          <tbody>
             <% scores.forEach((score, index) => { %>
-                <% if (score.userId === userId) { %>
-                    <tr>
-                        <td><%= index + 1 %></td>
-                        <% events.forEach((event, index) => { %>
-                            <% if (event.id == score.eventId) { %>
-                                <td>
-                                    <a href="/event/<%= score.eventId %>"><%= event.title %></a></td> 
-                            <% } %>
-                        <% }); %>
-                        <td><%= score.representing %></td>
-                        <td><%= new Date(score.createdAt).toLocaleDateString() %></td> 
-                    </tr>
-                <% } %>
+                <tr>
+                  <td><%= index + 1 %></td>
+                    <% events.forEach((event, index) => { %>
+                      <% if (event.id == score.eventId) { %>
+                        <td>
+                        <a href="/event/<%= score.eventId %>"><%= event.title %></a></td> 
+                      <% } %>
+                    <% }); %>
+                  <td><%= score.representing %></td>
+                  <td><%= score.judge %></td>
+                  <td><%= new Date(score.createdAt).toLocaleDateString() %></td> 
+                </tr>
             <% }); %>
-        </tbody>
+          </tbody>
+        <% } %>
       </table>
     </div>
     <%- include('layout/footer') %>
