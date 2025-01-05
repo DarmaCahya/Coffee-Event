@@ -22,7 +22,7 @@
       <% if (userRole === "admin" ) { %>
       <button type="button" class="btn btn-primary-green me-3" onclick="location.href='/admin/coffee/create'">Create Coffee</button>
       <% } %>
-      <h1 class="text-center mb-4">Daftar Kopi</h1>
+      <h1 class="text-center mb-4">Coffee List</h1>
       <div class="row mb-4">
         <% if (coffees.length > 0) { %> <% coffees.forEach(function(coffee, index) { %>
         <div class="col-12 col-sm-6 col-md-4 col-lg-3">
@@ -54,7 +54,7 @@
         </div>
         <% }) %> <% } else { %>
         <div>
-          <p class="w-full text-center">Belum ada kopi yang terdaftar.</p>
+          <p class="w-full text-center">No Coffee Registered Yet.</p>
         </div>
         <% } %>
       </div>

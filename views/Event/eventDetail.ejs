@@ -1,295 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Event Detail</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.5.0/font/bootstrap-icons.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" />
     <style>
-        body {
-            min-height: 100%;
-        }
+      body {
+        min-height: 100%;
+      }
 
-        .timeline {
-            margin-top: 20px;
-        }
+      .timeline {
+        margin-top: 20px;
+      }
 
-        .winners {
-            margin-top: 30px;
-        }
+      .winners {
+        margin-top: 30px;
+      }
 
-        .winners img {
-            width: 100px;
-            height: auto;
-            margin-left: 2.5vh;
-        }
+      .winners img {
+        width: 100px;
+        height: auto;
+        margin-left: 2.5vh;
+      }
 
-        .winner1 img{
-            width: 135px;
-            margin-left: 0;
-        }
+      .winner1 img {
+        width: 135px;
+        margin-left: 0;
+      }
 
-        .modal-body input {
-            margin-bottom: 10px;
-        }
+      .modal-body input {
+        margin-bottom: 10px;
+      }
 
-        .font-jakarta-sans-extra-bold {
-            font-weight: 800;
-        }
+      .font-jakarta-sans-extra-bold {
+        font-weight: 800;
+      }
 
-        .btn-primary-green {
-            background-color: #2d6a4f;
-            color: #fff;
-        }
+      .btn-primary-green {
+        background-color: #2d6a4f;
+        color: #fff;
+      }
 
-        .btn-primary-green:hover {
-            background-color: #2d6a4f;
-            color: #fff;
-            opacity: 0.7;
-        }
+      .btn-primary-green:hover {
+        background-color: #2d6a4f;
+        color: #fff;
+        opacity: 0.7;
+      }
 
-        .btn-primary-green.disabled{
-            background-color: #2d6a4f;
-            color: #fff;
-            /* opacity: 0.8; */
-        }
+      .btn-primary-green.disabled {
+        background-color: #2d6a4f;
+        color: #fff;
+        /* opacity: 0.8; */
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <%- include('../layout/navbar') %>
 
     <!-- Toast Notification -->
-   
+
     <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
-        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="d-flex">
-                <div class="toast-body">
-                    <%= error.length > 0 ? error[0] : '' %>
-                </div>
-                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
-            </div>
+      <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="d-flex">
+          <div class="toast-body"><%= error.length > 0 ? error[0] : '' %></div>
+          <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>
+      </div>
     </div>
 
-
     <div class="container mt-4">
-        <a href="/event/" class="btn btn-secondary mb-4" style="width: 15vh;">
-            <i class="bi bi-arrow-left"></i> Back
-        </a>
-        <% if (userRole === "admin" || userRole === "admin event") { %>
-            <div class="d-flex mb-3 d-md-flex justify-content-md-end">
-                <% if (user.id === event.userId) { %>
-                    <p class="me-3 mt-1 fw-bold fs-5">Manage Event : </p>
-                    <div class="">
-                        <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
-                        <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
-                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
-                        <% } %>
-                    </div>
-                <% } %>
-            </div>
+      <a href="/event/" class="btn btn-secondary mb-4" style="width: 15vh"> <i class="bi bi-arrow-left"></i> Back </a>
+      <% if (userRole === "admin" || userRole === "admin event") { %>
+      <div class="d-flex mb-3 d-md-flex justify-content-md-end">
+        <% if (user.id === event.userId) { %>
+        <p class="me-3 mt-1 fw-bold fs-5">Manage Event :</p>
+        <div class="">
+          <button type="button" class="btn btn-warning me-3" onclick="location.href='/admin/event/<%= event.id %>'">Update</button>
+          <% if ((userRole === "admin" && currentPath === "/admin/dashboard") ) { %>
+          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteModal" data-event-id="<%= event.id %>">Delete</button>
+          <% } %>
+        </div>
         <% } %>
+      </div>
+      <% } %>
 
-        <div class="card">
-            <img src="<%= event.image || 'https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg'%>" class="card-img-top img-fluid" alt="image" style="max-height: 40rem; object-fit: cover;">
-            <div class="card-body mt-4 m-4 mb-1">
-                <h1 class="card-title mb-4"><%= event.title %></h1>
-                <button type="button" class="btn btn-primary-green disabled mb-3"><%= event.tag %></button>
-                <p class="card-text"><%= event.description %></p>
-                <p class="card-text">Waktu Pelaksanaan: <%= event.startDate.toDateString() %> sampai <%= event.endDate.toDateString() %></p>
-                <% if (userRole === "admin") { %>
-                    <p class="card-text">Pin Event : <%= event.pin %></p>
-                <% } %>
-                <% if (userRole === "jury" || userRole === "admin") { %>
-                    <button type="button" class="btn btn-primary-green btn-lg my-4 w-25" data-bs-toggle="modal" data-bs-target="#pinModal">
-                        Form Penilaian
-                    </button>
-                <% } %>
-            </div>
+      <div class="card">
+        <img src="<%= event.image || 'https://i.ibb.co.com/rFTHdxG/coffee-cup.jpg'%>" class="card-img-top img-fluid" alt="image" style="max-height: 40rem; object-fit: cover" />
+        <div class="card-body mt-4 m-4 mb-1">
+          <h1 class="card-title mb-4"><%= event.title %></h1>
+          <button type="button" class="btn btn-primary-green disabled mb-3"><%= event.tag %></button>
+          <p class="card-text"><%= event.description %></p>
+          <p class="card-text">Time of Event : <%= event.startDate.toDateString() %> - <%= event.endDate.toDateString() %></p>
+          <% if (userRole === "admin") { %>
+          <p class="card-text">Pin Event : <%= event.pin %></p>
+          <% } %> <% if (userRole === "jury" || userRole === "admin") { %>
+          <button type="button" class="btn btn-primary-green btn-lg my-4 w-25" data-bs-toggle="modal" data-bs-target="#pinModal">Evaluation Form</button>
+          <% } %>
         </div>
+      </div>
 
-        <div class="winners card mb-5">
-            <h3 class="text-center fw-bold m-5 fs-3">Pemenang Kompetisi</h3>
-            <div class="my-5 d-flex justify-content-around">
-                <div class="mt-4">
-                    <img src="https://i.ibb.co.com/ZGLwxbq/12.png" alt="Trophy Image">
-                    <p class="text-center">Juara II<br><%= event.winner2 || "Belum diumumkan" %></p>
-                </div>
-                <div class="winner1">
-                    <img src="https://i.ibb.co.com/s3pTGp2/11.png" alt="Trophy Image">
-                    <p class="text-center">Juara I<br><%= event.winner1 || "Belum diumumkan" %></p>
-                </div>
-                <div class="mt-4">
-                    <img src="https://i.ibb.co.com/VWkh2BF/13.png" alt="Trophy Image">
-                    <p class="text-center">Juara III<br><%= event.winner3 || "Belum diumumkan" %></p>
-                </div>
-            </div>
-        </div>        
-
-        <div class="card mb-5">
-            <div class="m-5 mb-1">
-                <h3 class="fw-bold fs-3 mb-3">List Scores</h3>
-                <% if (userRole === "jury") { %>
-                    <%- include('../layout/score') %>
-                <% } else if (userRole === "admin" || userRole === "admin event") { %>
-                        <% if (scores && scores.length > 0) { %>
-                        <table class="table table-hover table-sm table-striped-columns mb-5">
-                            <caption>List of scores</caption>
-                            <thead class="fs-5 table-light">
-                                <tr>
-                                    <th scope="row">No</th>
-                                    <th scope="col">Name Jury</th>
-                                    <th scope="col">Name Participant</th>
-                                    <th scope="col">Score</th>
-                                    <% if (userRole !== "admin event") { %>
-                                        <th scope="col">Action</th>
-                                    <% } %>
-                                </tr>
-                            </thead>
-                            <tbody class="table-group-divider">
-                                <% scores.forEach(function(scoreList, index) { %>
-                                    <tr>    
-                                        <th><%= index + 1 %></th>
-                                        <td><%= scoreList.judge %></td>
-                                        <td><%= scoreList.representing %></td>
-                                        <td><%= scoreList.total_score %></td>
-                                        <% if (userRole !== "admin event") { %>
-                                            <td class=" mb-3">
-                                                <button class="btn btn-warning me-4" onclick="location.href='/event/ <%= event.id %>/score/ <%= scoreList.id %>'">Update</button>
-                                                <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display:inline;">
-                                                    <button type="submit" class="btn btn-danger">Delete</button>
-                                                </form>                                            
-                                            </td>
-                                        <% } %>
-                                    </tr>
-                                <% }) %>
-                            </tbody>
-                        </table>
-                    <% } else { %>
-                        <p>No scores available for this event.</p>
-                    <% } %>
-                <% } else { %>
-                    <div class="mt-4">
-                        <h3>Login Juri</h3>
-                        <p>Untuk juri silahkan login disini, <a href="/signin">Login</a></p>
-                    </div>
-                <% } %>
-            </div>
+      <div class="winners card mb-5">
+        <h3 class="text-center fw-bold m-5 fs-3">Competition Winners</h3>
+        <div class="my-5 d-flex justify-content-around">
+          <div class="mt-4">
+            <img src="https://i.ibb.co.com/ZGLwxbq/12.png" alt="Trophy Image" />
+            <p class="text-center">2nd Place<br /><%= event.winner2 || "Not Announced Yet" %></p>
+          </div>
+          <div class="winner1">
+            <img src="https://i.ibb.co.com/s3pTGp2/11.png" alt="Trophy Image" />
+            <p class="text-center">1st Place<br /><%= event.winner1 || "Not Announced Yet" %></p>
+          </div>
+          <div class="mt-4">
+            <img src="https://i.ibb.co.com/VWkh2BF/13.png" alt="Trophy Image" />
+            <p class="text-center">3rd Place<br /><%= event.winner3 || "Not Announced Yet" %></p>
+          </div>
         </div>
+      </div>
+
+      <div class="card mb-5">
+        <div class="m-5 mb-1">
+          <h3 class="fw-bold fs-3 mb-3">List Scores</h3>
+          <% if (userRole === "jury") { %> <%- include('../layout/score') %> <% } else if (userRole === "admin" || userRole === "admin event") { %> <% if (scores && scores.length > 0) { %>
+          <table class="table table-hover table-sm table-striped-columns mb-5">
+            <caption>
+              List of scores
+            </caption>
+            <thead class="fs-5 table-light">
+              <tr>
+                <th scope="row">No</th>
+                <th scope="col">Jury Name</th>
+                <th scope="col">Participant Name</th>
+                <th scope="col">Score</th>
+                <% if (userRole !== "admin event") { %>
+                <th scope="col">Action</th>
+                <% } %>
+              </tr>
+            </thead>
+            <tbody class="table-group-divider">
+              <% scores.forEach(function(scoreList, index) { %>
+              <tr>
+                <th><%= index + 1 %></th>
+                <td><%= scoreList.judge %></td>
+                <td><%= scoreList.representing %></td>
+                <td><%= scoreList.total_score %></td>
+                <% if (userRole !== "admin event") { %>
+                <td class="mb-3">
+                  <button class="btn btn-warning me-4" onclick="location.href='/event/ <%= event.id %>/score/ <%= scoreList.id %>'">Update</button>
+                  <form action="/api/event/<%= event.id %>/scores/<%= scoreList.id %>?_method=DELETE" method="POST" style="display: inline">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                  </form>
+                </td>
+                <% } %>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+          <% } else { %>
+          <p>No scores available for this event.</p>
+          <% } %> <% } else { %>
+          <div class="mt-4">
+            <h3>Login Jury</h3>
+            <p>For Judges, Please Log In Here, <a href="/signin">Login</a></p>
+          </div>
+          <% } %>
+        </div>
+      </div>
     </div>
 
     <%- include('../layout/footer') %>
-    
+
     <!-- PIN Modal -->
-        <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form action="/event/score/<%= event.id %>/verify" method="POST" autocomplete="off">
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="eventPin" class="form-label">PIN</label>
-                                <input type="text" class="form-control" id="eventPin" required autocomplete="off">
-                                <!-- Hidden input to store the actual PIN -->
-                                <input type="hidden" name="eventPin" id="actualPin">
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary-green">Submit</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
-        <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
-              <div class="modal-body">
-                Are you sure you want to delete this event?
-              </div>
-              <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <form id="deleteForm" action="" method="POST" style="display:inline;">
-                  <input type="hidden" name="_method" value="DELETE">
-                  <button type="submit" class="btn btn-danger">Delete</button>
-                </form>
-              </div>
-            </div>
+    <div class="modal fade" id="pinModal" tabindex="-1" aria-labelledby="pinModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="pinModalLabel">Enter PIN</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
-        </div>  
-        <script>
-            const pinInput = document.getElementById("eventPin");
-            const actualPinInput = document.getElementById("actualPin");
-            let pinValue = "";
+          <form action="/event/score/<%= event.id %>/verify" method="POST" autocomplete="off">
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="eventPin" class="form-label">PIN</label>
+                <input type="text" class="form-control" id="eventPin" required autocomplete="off" />
+                <!-- Hidden input to store the actual PIN -->
+                <input type="hidden" name="eventPin" id="actualPin" />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-primary-green">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
 
-            pinInput.addEventListener("input", function(event) {
-                // Get the newly entered value
-                const newValue = event.target.value;
-                // Update pinValue to store the actual PIN
-                pinValue += newValue.slice(pinValue.length);
-                
-                // Set the display to asterisks
-                event.target.value = "*".repeat(pinValue.length);
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">Confirm Delete</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">Are you sure you want to delete this event?</div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <form id="deleteForm" action="" method="POST" style="display: inline">
+              <input type="hidden" name="_method" value="DELETE" />
+              <button type="submit" class="btn btn-danger">Delete</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      const pinInput = document.getElementById("eventPin");
+      const actualPinInput = document.getElementById("actualPin");
+      let pinValue = "";
 
-                // Update hidden input with the actual PIN
-                actualPinInput.value = pinValue;
+      pinInput.addEventListener("input", function (event) {
+        // Get the newly entered value
+        const newValue = event.target.value;
+        // Update pinValue to store the actual PIN
+        pinValue += newValue.slice(pinValue.length);
+
+        // Set the display to asterisks
+        event.target.value = "*".repeat(pinValue.length);
+
+        // Update hidden input with the actual PIN
+        actualPinInput.value = pinValue;
+      });
+
+      pinInput.addEventListener("keydown", function (event) {
+        // Handle backspace to remove characters from pinValue
+        if (event.key === "Backspace") {
+          pinValue = pinValue.slice(0, -1);
+          actualPinInput.value = pinValue;
+        }
+      });
+
+      var deleteModal = document.getElementById("deleteModal");
+      deleteModal.addEventListener("show.bs.modal", function (event) {
+        var button = event.relatedTarget;
+        var eventId = button.getAttribute("data-event-id");
+
+        var deleteForm = document.getElementById("deleteForm");
+        deleteForm.action = "/api/event/delete/" + eventId + "?_method=DELETE";
+      });
+    </script>
+
+    <!-- Show toast if there is an error -->
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Show SweetAlert if there is an error -->
+    <script>
+      window.addEventListener("load", function () {
+        // Menggunakan event load di tingkat window
+        const error = "<%= error.length > 0 ? error[0] : '' %>";
+        if (error) {
+          setTimeout(function () {
+            Swal.fire({
+              icon: "error",
+              title: "Error",
+              text: error,
+              confirmButtonColor: "#d33", // Warna tombol konfirmasi
+              background: "#fff", // Warna background alert
+              color: "#721c24", // Warna teks
+              confirmButtonText: "OK",
             });
-
-            pinInput.addEventListener("keydown", function(event) {
-                // Handle backspace to remove characters from pinValue
-                if (event.key === "Backspace") {
-                    pinValue = pinValue.slice(0, -1);
-                    actualPinInput.value = pinValue;
-                }
-            });
-
-            var deleteModal = document.getElementById('deleteModal');
-            deleteModal.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget; 
-            var eventId = button.getAttribute('data-event-id');
-            
-            var deleteForm = document.getElementById('deleteForm');
-            deleteForm.action = '/api/event/delete/' + eventId + '?_method=DELETE'; 
-            });
-        </script>
-
-        <!-- Show toast if there is an error -->
-   
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <!-- Show SweetAlert if there is an error -->
-        <script>
-            window.addEventListener("load", function() { // Menggunakan event load di tingkat window
-                const error = "<%= error.length > 0 ? error[0] : '' %>";
-                if (error) {
-                    setTimeout(function() {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error',
-                            text: error,
-                            confirmButtonColor: '#d33', // Warna tombol konfirmasi
-                            background: '#fff', // Warna background alert
-                            color: '#721c24', // Warna teks
-                            confirmButtonText: 'OK'
-                        });
-                    }, 0);
-                }
-            });
-        </script>
-</body>
-
+          }, 0);
+        }
+      });
+    </script>
+  </body>
 </html>
