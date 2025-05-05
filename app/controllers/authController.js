@@ -6,12 +6,23 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 exports.signup = async (req, res) => {
+    let { username, email, password, role } = req.body;
+
+    if (!role) {
+        return res.status(400).send({ message: "Role is required." });
+    }
+
+    const validRoles = ['admin event', 'jury'];
+    if( !validRoles.includes(role) ) {
+        return res.redirect('/admin/signup?error=InvalidRole');
+    }
+
     try {
         const user = await User.create({
-            username: req.body.username,
-            email: req.body.email,
-            password: bcrypt.hashSync(req.body.password, 8), 
-            role: req.body.role,
+            username: username,
+            email: email,
+            password: bcrypt.hashSync(password, 8), 
+            role: role,
             is_active: 1
         });
 
@@ -36,7 +47,7 @@ exports.signin = async (req, res) => {
 
         if (!user) {
             console.log("No user found with email:", email);
-            return res.redirect('/signin?error=User tidak ditemukan');
+            return res.redirect('/signin?error=UserNotFound');
         }
 
         if (user.is_active === 0) {

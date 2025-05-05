@@ -5,7 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "test-login": "node ./tests/test-login.js",
+    "test-register": "node ./tests/test-register.js",
+    "test-all": "npm run test-login && npm run test-register"
   },
   "keywords": [],
   "author": "",
@@ -13,6 +16,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "bootstrap": "^5.3.3",
+    "chromedriver": "^135.0.4",
     "coffee-competition": "file:",
     "connect-flash": "^0.1.1",
     "cookie-session": "^2.1.0",
@@ -25,6 +29,7 @@
     "jsonwebtoken": "^9.0.2",
     "method-override": "^3.0.0",
     "mysql2": "^3.10.3",
+    "selenium-webdriver": "^4.32.0",
     "sequelize": "^6.37.3"
   },
   "devDependencies": {

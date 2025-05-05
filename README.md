@@ -6,6 +6,29 @@ This project provides APIs and views to manage events and scores, with different
 
 ---
 
+## Running Tests
+
+This project includes automated tests for authentication.
+
+### Run All Tests
+To run all the tests (login and register tests), execute the following command:
+**npm run test-all**
+This command will run the following tests:
+- Login Test (test-login.js)
+- Register Test (test-register.js)
+
+Run Individual Tests
+You can also run individual tests by using:
+- Test Login (test-login.js)
+**npm run test-login**
+
+- Test Register (test-register.js)
+**npm run test-register**
+
+For detailed testing documentation, you can refer to the following documents:
+- https://docs.google.com/document/d/1G35_DJ-cXH7cD2RLc6ZpWhdqalbV3igHBF77CkyFtb0/edit?usp=sharing
+
+
 ## Public Routes
 
 These routes are accessible by any authenticated user, including guests.

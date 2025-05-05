@@ -122,7 +122,7 @@ async function initial() {
     email: "juri1@gmail.com",
     password: bcrypt.hashSync("asd"),
     role: "jury",
-    is_active: 1
+    is_active: 0
   });
 
   await db.user.create({

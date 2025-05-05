@@ -80,7 +80,7 @@
 
     <div class="collapse navbar-collapse justify-content-end mt-2" id="navbarNav">
       <% if (userRole === "admin") { %>
-      <div class="nav-item mt-2">
+      <div class="nav-item mt-2" id="admin-nav">
         <% if (currentPath !== "/admin/dashboard") { %>
         <form action="/admin/dashboard" method="GET" class="d-inline">
           <button type="submit" class="btn fs-5 btn-primary-green">Admin Page</button>
